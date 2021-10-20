@@ -41,13 +41,14 @@ public class ChromosomeEditor extends JPanel {
 		this.indiv = indiv;
 		this.chromosome = this.indiv.getChromosome();
 
+		//Creates an actionListener to monitor buttons and flip their bits when they're clicked
 		ActionListener listen = new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int index = Integer.parseInt(e.getActionCommand());
 				indiv.flipBit(index);
 				chromosome = indiv.getChromosome();
+				//sets button color according to updated bit value
 				switch (chromosome[index]) {
 				case '0':
 					buttons.get(index).setBackground(ZERO_COLOR);
@@ -56,14 +57,22 @@ public class ChromosomeEditor extends JPanel {
 				case '?':
 					buttons.get(index).setBackground(Q_COLOR);
 				}
-
 			}
 		};
 
+		//Adds buttons of the correct color
 		for (int i = 0; i < this.chromosome.length; i++) {
 			buttons.add(new JButton(Integer.toString(i)));
-			this.add(buttons.get(i));
 			buttons.get(i).setActionCommand(Integer.toString(i));
+			switch (chromosome[i]) {
+			case '0':
+				buttons.get(i).setBackground(ZERO_COLOR);
+			case '1':
+				buttons.get(i).setBackground(ONE_COLOR);
+			case '?':
+				buttons.get(i).setBackground(Q_COLOR);
+			}
+			this.add(buttons.get(i));
 			buttons.get(i).addActionListener(listen);
 		}
 	}
