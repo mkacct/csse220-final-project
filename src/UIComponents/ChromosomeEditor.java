@@ -1,13 +1,12 @@
 package UIComponents;
 
 import java.awt.Color;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import SimComponents.Individual;
@@ -16,7 +15,7 @@ import SimComponents.Individual;
  * Class ChromosomeEditor
  * 
  * @author R002 <br>
- *         Takes an individual and displays it as a series of buttons. Buttons
+ *         Takes an individual and displays it as a grid of buttons. Buttons
  *         are colored based on their bit value and clicking a button flips the
  *         bit.
  */
@@ -40,7 +39,10 @@ public class ChromosomeEditor extends JPanel {
 		super();
 		this.indiv = indiv;
 		this.chromosome = this.indiv.getChromosome();
-
+		GridLayout grid = new GridLayout(0, (int)Math.sqrt(this.chromosome.length));
+		grid.setHgap(0);
+		grid.setVgap(0);
+		this.setLayout(grid);
 		//Creates an actionListener to monitor buttons and flip their bits when they're clicked
 		ActionListener listen = new ActionListener() {
 			@Override
