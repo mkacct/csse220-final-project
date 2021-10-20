@@ -52,10 +52,13 @@ public class ChromosomeEditor extends JPanel {
 				switch (chromosome[index]) {
 				case '0':
 					buttons.get(index).setBackground(ZERO_COLOR);
+					break;
 				case '1':
 					buttons.get(index).setBackground(ONE_COLOR);
+					break;
 				case '?':
 					buttons.get(index).setBackground(Q_COLOR);
+					break;
 				}
 			}
 		};
@@ -67,10 +70,13 @@ public class ChromosomeEditor extends JPanel {
 			switch (chromosome[i]) {
 			case '0':
 				buttons.get(i).setBackground(ZERO_COLOR);
+				break;
 			case '1':
 				buttons.get(i).setBackground(ONE_COLOR);
+				break;
 			case '?':
 				buttons.get(i).setBackground(Q_COLOR);
+				break;
 			}
 			this.add(buttons.get(i));
 			buttons.get(i).addActionListener(listen);
