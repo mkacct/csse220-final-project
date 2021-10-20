@@ -1,3 +1,5 @@
+package Util;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -10,10 +12,10 @@ import SimComponents.Individual;
  * @author R_002
  */
 public class FileUtil {
-	public static Individual load(String path) {
+	public static Individual load(File file) {
 		Scanner scanner;
 		try {
-			scanner = new Scanner(new File(path));
+			scanner = new Scanner(file);
 		} catch (FileNotFoundException err) {
 			return null;
 		}
@@ -23,10 +25,10 @@ public class FileUtil {
 		return new Individual(chromosome, charSet);
 	}
 
-	public static void save(String path, Individual indiv) {
+	public static void save(File file, Individual indiv) {
 		PrintWriter pw;
 		try {
-			pw = new PrintWriter(new File(path));
+			pw = new PrintWriter(file);
 		} catch (FileNotFoundException err) {
 			err.printStackTrace();
 			return;
