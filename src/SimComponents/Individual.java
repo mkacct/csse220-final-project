@@ -89,7 +89,7 @@ public class Individual {
 		do {
 			set = charSet[(int) (Math.random() * charSet.length)];
 		} while (set == chromosome[bit]);
-		charSet[bit] = set;
+		chromosome[bit] = set;
 	}
 	
 	/**
