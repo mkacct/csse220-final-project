@@ -23,7 +23,7 @@ public class FileUtil {
 		return new Individual(chromosome, charSet);
 	}
 
-	public static void save(String path, Individual individual) {
+	public static void save(String path, Individual indiv) {
 		PrintWriter pw;
 		try {
 			pw = new PrintWriter(new File(path));
@@ -31,8 +31,8 @@ public class FileUtil {
 			err.printStackTrace();
 			return;
 		}
-		pw.println(String.join(individual.getChromosome()));
-		pw.println(String.join(individual.getCharset()));
+		pw.println(new String(indiv.getChromosome()));
+		pw.println(new String(indiv.getCharSet()));
 		pw.close();
 	}
 }
