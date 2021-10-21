@@ -12,7 +12,12 @@ import SimComponents.Individual;
  * @author R_002
  */
 public class FileUtil {
-	public static Individual load(File file) {
+	/**
+	 * Load an individual from file
+	 * @param file to load
+	 * @return the individual
+	 */
+	public static Individual loadIndiv(File file) {
 		Scanner scanner;
 		try {
 			scanner = new Scanner(file);
@@ -25,7 +30,12 @@ public class FileUtil {
 		return new Individual(chromosome, charSet);
 	}
 
-	public static void save(File file, Individual indiv) {
+	/**
+	 * Save an individual to file (overwriting)
+	 * @param file to save to
+	 * @param indiv the invdividual
+	 */
+	public static void saveIndiv(File file, Individual indiv) {
 		PrintWriter pw;
 		try {
 			pw = new PrintWriter(file);
@@ -33,8 +43,8 @@ public class FileUtil {
 			err.printStackTrace();
 			return;
 		}
-		pw.println(new String(indiv.getChromosome()));
 		pw.println(new String(indiv.getCharSet()));
+		pw.println(new String(indiv.getChromosome()));
 		pw.close();
 	}
 }
