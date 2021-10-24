@@ -9,8 +9,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import Main.FileUtil;
 import SimComponents.Individual;
-import Util.FileUtil;
 
 /**
  * Window for editing an individual
