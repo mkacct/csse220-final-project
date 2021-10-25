@@ -63,7 +63,7 @@ public class EditorUI extends JFrame {
 	 * @param size
 	 */
 	public EditorUI(int size) {
-		this(new Individual(size));
+		this(new Individual(size, false));
 	}
 
 	/**
