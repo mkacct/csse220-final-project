@@ -24,6 +24,8 @@ public class EditorUI extends JFrame {
 	private File saveFile;
 	private double mutationRate;
 
+	private ChromosomeEditor editor;
+
 	/**
 	 * Menu bar shown at the bottom of the editor
 	 */
@@ -74,7 +76,7 @@ public class EditorUI extends JFrame {
 		super();
 		this.indiv = indiv;
 		this.saveFile = null;
-		this.mutationRate = 0.01;
+		this.mutationRate = 0;
 		this.setup();
 	}
 
@@ -86,7 +88,7 @@ public class EditorUI extends JFrame {
 		super();
 		this.indiv = FileUtil.loadIndiv(saveFile);
 		this.saveFile = saveFile;
-		this.mutationRate = 0.01;
+		this.mutationRate = 0;
 		this.setup();
 	}
 
@@ -94,8 +96,9 @@ public class EditorUI extends JFrame {
 	 * Called by constructors after initializing properties
 	 */
 	private void setup() {
+		this.editor = new ChromosomeEditor(indiv);
 		this.updateWindowTitle();
-		this.add(new ChromosomeEditor(indiv), BorderLayout.CENTER);
+		this.add(this.editor, BorderLayout.CENTER);
 		this.add(new EditorOptions(), BorderLayout.SOUTH);
 		this.pack();
 		this.setVisible(true);
