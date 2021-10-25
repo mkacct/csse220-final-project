@@ -27,7 +27,7 @@ public class EditorUI extends JFrame {
 	private ChromosomeEditor editor;
 
 	/**
-	 * Menu bar shown at the bottom of the editor
+	 * Menu bar shown at the bottom of the editor, with options for saving and mutation
 	 */
 	private class EditorOptions extends JPanel {
 		EditorOptions() {
