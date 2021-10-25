@@ -8,6 +8,7 @@ import java.io.File;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -46,7 +47,9 @@ public class EditorUI extends JFrame {
 			});
 			this.add(saveAs);
 			
-			JTextField mutate = new JTextField("0");
+			JLabel mLabel = new JLabel("Mutation rate:");
+			this.add(mLabel);
+			JTextField mutate = new JTextField("0", 5);
 			mutate.addActionListener(new ActionListener() {
 
 				@Override
