@@ -41,12 +41,15 @@ public class MainUI extends JFrame {
 	private class MainMenu extends JPanel {
 		MainMenu() {
 			super();
+
 			JButton newEditor = new JButton("New Indiv");
-			JButton open = new JButton("Open Indiv (from file)");
 			newEditor.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {new EditorUI();}
 			});
+			this.add(newEditor);
+
+			JButton open = new JButton("Open Indiv (from file)");
 			open.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -57,8 +60,8 @@ public class MainUI extends JFrame {
 					new EditorUI(file);
 				}
 			});
-			this.add(newEditor);
 			this.add(open);
+			
 			this.setLayout(new GridLayout(this.getComponentCount(), 1));
 		}
 	}

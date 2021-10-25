@@ -26,7 +26,6 @@ public class EditorUI extends JFrame {
 	 */
 	private class EditorOptions extends JPanel {
 		EditorOptions() {
-			JButton mutate = new JButton("Mutate");
 			JButton save = new JButton("Save");
 			save.addActionListener(new ActionListener() {
 				@Override
@@ -34,12 +33,14 @@ public class EditorUI extends JFrame {
 					FileUtil.saveIndiv(EditorUI.this.saveFile, EditorUI.this.indiv);
 				}
 			});
+			this.add(save);
+			
+			JButton mutate = new JButton("Mutate");
 			mutate.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {indiv.mutate(EditorUI.this.mutationRate);}
 			});
 			this.add(mutate);
-			this.add(save);
 		}
 	}
 
