@@ -21,11 +21,17 @@ public class Individual {
 	 * @param size <br>
 	 *             Constraints: size >= 0
 	 */
-	public Individual(int size) {
+	public Individual(int size, boolean random) {
 		this.chromosome = new char[size];
 		char[] charSet = { '0', '1' };
 		this.charSet = charSet;
-		this.initializeRandom();
+		if(random) {
+			this.initializeRandom();
+		}else {
+			for(int i = 0; i < chromosome.length; i++) {
+				this.chromosome[i] = this.charSet[0];
+			}
+		}
 	}
 
 	/**
