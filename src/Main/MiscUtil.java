@@ -9,7 +9,7 @@ public class MiscUtil {
 	 * @param arr    <br>
 	 *               Requires: arr is not empty
 	 * @param toFind
-	 * @return
+	 * @return an int between 0 and arr.length (inclusive)
 	 */
 	public static int arrayIndexOf(char[] arr, char toFind) {
 		for (int i = 0; i < arr.length; i++) {
@@ -26,7 +26,7 @@ public class MiscUtil {
 	 * proportion is greater than 1, returns -2.
 	 * 
 	 * @param proportion
-	 * @return
+	 * @return a double from 0 to 1 (inclusive)
 	 */
 	public static double parseProportion(String proportion) {
 		double prop;
@@ -35,8 +35,8 @@ public class MiscUtil {
 		} catch (NumberFormatException err) {
 			if (proportion.indexOf('/') != -1) {
 				try {
-					prop = (double) (Integer.parseInt(proportion.substring(0, proportion.indexOf('/')))
-							/ Integer.parseInt(proportion.substring(proportion.indexOf('/') + 1)));
+					prop = (double) (Double.parseDouble(proportion.substring(0, proportion.indexOf('/')))
+							/ Double.parseDouble(proportion.substring(proportion.indexOf('/') + 1)));
 				} catch (NumberFormatException err2) {
 					return -1;
 				}

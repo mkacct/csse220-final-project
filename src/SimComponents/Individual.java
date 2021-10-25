@@ -1,5 +1,7 @@
 package SimComponents;
+
 import Main.MiscUtil;
+
 /**
  * Class: Individual
  * 
@@ -15,20 +17,22 @@ public class Individual {
 	char[] charSet;
 
 	/**
-	 * Creates an individual with default potential characters 0 and 1 and
-	 * initializes a chromosome of length size with random values of 0 and 1
+	 * Creates an individual with default potential characters 0 and 1. If random is
+	 * true, initializes a chromosome of length size with random values of 0 and 1.
+	 * If random is false, initializes a chromosome with all values 0
 	 * 
-	 * @param size <br>
-	 *             Constraints: size >= 0
+	 * @param size   <br>
+	 *               Constraints: size >= 0
+	 * @param random
 	 */
 	public Individual(int size, boolean random) {
 		this.chromosome = new char[size];
 		char[] charSet = { '0', '1' };
 		this.charSet = charSet;
-		if(random) {
+		if (random) {
 			this.initializeRandom();
-		}else {
-			for(int i = 0; i < chromosome.length; i++) {
+		} else {
+			for (int i = 0; i < chromosome.length; i++) {
 				this.chromosome[i] = this.charSet[0];
 			}
 		}
@@ -36,18 +40,26 @@ public class Individual {
 
 	/**
 	 * Creates an individual with potential characters contained in charSet.
-	 * Individual is of length size and bits are ranomly initialized to characters
-	 * from the charSet.
+	 * Individual is of length size. If random is true, the chromosome is ranomly
+	 * initialized to characters from the charSet. If random is false, the
+	 * chromosome is initialized to the first element of the charSet.
 	 * 
 	 * @param size    <br>
 	 *                size >= 0
 	 * @param charSet <br>
 	 *                charSet is not empty
+	 * @param random
 	 */
-	public Individual(int size, char[] charSet) {
+	public Individual(int size, char[] charSet, boolean random) {
 		this.chromosome = new char[size];
 		this.charSet = charSet;
-		this.initializeRandom();
+		if (random) {
+			this.initializeRandom();
+		} else {
+			for (int i = 0; i < chromosome.length; i++) {
+				this.chromosome[i] = this.charSet[0];
+			}
+		}
 	}
 
 	/**
@@ -60,12 +72,13 @@ public class Individual {
 	 *                   charSet is not empty
 	 */
 	public Individual(char[] chromosome, char[] charSet) {
-		for(char c:chromosome) {
+		for (char c : chromosome) {
 			boolean contains = false;
-			for(char s:charSet) {
-				if(c == s) contains = true;
+			for (char s : charSet) {
+				if (c == s)
+					contains = true;
 			}
-			if(contains == false) {
+			if (contains == false) {
 				System.out.println("Chromosome and charSet do not match");
 				return;
 			}
@@ -97,18 +110,20 @@ public class Individual {
 		} while (set == chromosome[bit]);
 		chromosome[bit] = set;
 	}
-	
+
 	public void flipBit(int bit) {
-		chromosome[bit] = charSet[(MiscUtil.arrayIndexOf(charSet, chromosome[bit])+1)%charSet.length];
+		chromosome[bit] = charSet[(MiscUtil.arrayIndexOf(charSet, chromosome[bit]) + 1) % charSet.length];
 	}
+
 	/**
 	 * Mutates the chromosome. Each bit has a chance of flipping equal to rate.
-	 * @param rate
-	 * <br> 0 <= rate <= 1
+	 * 
+	 * @param rate <br>
+	 *             0 <= rate <= 1
 	 */
 	public void mutate(double rate) {
-		for(int i = 0; i < chromosome.length; i++) {
-			if(Math.random() < rate) {
+		for (int i = 0; i < chromosome.length; i++) {
+			if (Math.random() < rate) {
 				this.flipBitRandom(i);
 			}
 		}
@@ -116,6 +131,7 @@ public class Individual {
 
 	/**
 	 * Returns a copy of the chromosome.
+	 * 
 	 * @return char[]
 	 */
 	public char[] getChromosome() {
@@ -125,9 +141,10 @@ public class Individual {
 		}
 		return chromosome1;
 	}
-	
+
 	/**
 	 * Returns a copy of the set of potential characters.
+	 * 
 	 * @return char[]
 	 */
 	public char[] getCharSet() {
@@ -137,7 +154,7 @@ public class Individual {
 		}
 		return charSet1;
 	}
-	
+
 	/**
 	 * Returns a copy of the individual.
 	 * 

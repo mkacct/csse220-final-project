@@ -52,7 +52,7 @@ public class EditorUI extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					EditorUI.this.mutationRate = MiscUtil.parseProportion(mutate.getText());
-					EditorUI.this.indiv.mutate(EditorUI.this.mutationRate);
+					EditorUI.this.editor.handleMutate(EditorUI.this.mutationRate);
 				}
 				
 			});

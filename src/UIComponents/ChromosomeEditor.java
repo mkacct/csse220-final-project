@@ -15,9 +15,8 @@ import SimComponents.Individual;
  * Class ChromosomeEditor
  * 
  * @author R002 <br>
- *         Takes an individual and displays it as a grid of buttons. Buttons
- *         are colored based on their bit value and clicking a button flips the
- *         bit.
+ *         Takes an individual and displays it as a grid of buttons. Buttons are
+ *         colored based on their bit value and clicking a button flips the bit.
  */
 public class ChromosomeEditor extends JPanel {
 	public static final Color ZERO_COLOR = Color.CYAN;
@@ -25,7 +24,6 @@ public class ChromosomeEditor extends JPanel {
 	public static final Color Q_COLOR = Color.BLUE;
 
 	Individual indiv;
-	char[] chromosome;
 	ArrayList<JButton> buttons = new ArrayList<JButton>();
 
 	/**
@@ -38,19 +36,19 @@ public class ChromosomeEditor extends JPanel {
 	public ChromosomeEditor(Individual indiv) {
 		super();
 		this.indiv = indiv;
-		this.chromosome = this.indiv.getChromosome();
-		GridLayout grid = new GridLayout(0, (int)Math.sqrt(this.chromosome.length));
+		GridLayout grid = new GridLayout(0, (int) Math.sqrt(this.indiv.getChromosome().length));
 		grid.setHgap(0);
 		grid.setVgap(0);
 		this.setLayout(grid);
-		//Creates an actionListener to monitor buttons and flip their bits when they're clicked
+		// Creates an actionListener to monitor buttons and flip their bits when they're
+		// clicked
 		ActionListener listen = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int index = Integer.parseInt(e.getActionCommand());
 				indiv.flipBit(index);
-				chromosome = indiv.getChromosome();
-				//sets button color according to updated bit value
+				char[] chromosome = indiv.getChromosome();
+				// sets button color according to updated bit value
 				switch (chromosome[index]) {
 				case '0':
 					buttons.get(index).setBackground(ZERO_COLOR);
@@ -65,10 +63,23 @@ public class ChromosomeEditor extends JPanel {
 			}
 		};
 
-		//Adds buttons of the correct color
-		for (int i = 0; i < this.chromosome.length; i++) {
+		// Adds buttons of the correct color
+		char[] chromosome = this.indiv.getChromosome();
+		for (int i = 0; i < chromosome.length; i++) {
 			buttons.add(new JButton(Integer.toString(i)));
 			buttons.get(i).setActionCommand(Integer.toString(i));
+			this.add(buttons.get(i));
+			buttons.get(i).addActionListener(listen);
+		}
+		this.updateButtons();
+	}
+
+	/**
+	 * Updates the colors of the buttons to match the individual's chromosome
+	 */
+	private void updateButtons() {
+		char[] chromosome = this.indiv.getChromosome();
+		for (int i = 0; i < chromosome.length; i++) {
 			switch (chromosome[i]) {
 			case '0':
 				buttons.get(i).setBackground(ZERO_COLOR);
@@ -80,9 +91,18 @@ public class ChromosomeEditor extends JPanel {
 				buttons.get(i).setBackground(Q_COLOR);
 				break;
 			}
-			this.add(buttons.get(i));
-			buttons.get(i).addActionListener(listen);
 		}
 	}
 
+	/**
+	 * Mutates the given individual at the given rate and updates the buttons
+	 * accordingly
+	 * 
+	 * @param rate <br>
+	 *             Requires: rate between 0 and 1 (inclusive)
+	 */
+	public void handleMutate(double rate) {
+		this.indiv.mutate(rate);
+		this.updateButtons();
+	}
 }
