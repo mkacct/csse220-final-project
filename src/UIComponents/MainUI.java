@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import Main.App;
@@ -45,20 +46,14 @@ public class MainUI extends JFrame {
 			JButton newEditor = new JButton("New Indiv");
 			newEditor.addActionListener(new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent e) {new EditorUI();}
+				public void actionPerformed(ActionEvent e) {MainUI.this.newIndiv();}
 			});
 			this.add(newEditor);
 
 			JButton open = new JButton("Open Indiv (from file)");
 			open.addActionListener(new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent e) {
-					JFileChooser picker = new JFileChooser();
-					int returnVal = picker.showOpenDialog(MainUI.this);
-					if (returnVal != JFileChooser.APPROVE_OPTION) {return;}
-					File file = picker.getSelectedFile();
-					new EditorUI(file);
-				}
+				public void actionPerformed(ActionEvent e) {MainUI.this.openIndiv();}
 			});
 			this.add(open);
 			
@@ -74,5 +69,36 @@ public class MainUI extends JFrame {
 		this.pack();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
+	}
+
+	/**
+	 * Prompt the user for a size and make a new indiv
+	 */
+	private void newIndiv() {
+		String s = JOptionPane.showInputDialog(MainUI.this, "Enter size of chromosome:");
+		if (s == null) {return;}
+		int size = 0;
+		try {
+			size = Integer.parseInt(s);
+		} catch (NumberFormatException err) {
+			JOptionPane.showMessageDialog(MainUI.this, "Invalid size \"" + s + "\"");
+			return;
+		}
+		if (size > 0) {
+			new EditorUI(size);
+		} else {
+			JOptionPane.showMessageDialog(MainUI.this, "Size must be at least 1");
+		}
+	}
+
+	/**
+	 * Have the user pick a file to open an indiv
+	 */
+	private void openIndiv() {
+		JFileChooser picker = new JFileChooser();
+		int returnVal = picker.showOpenDialog(MainUI.this);
+		if (returnVal != JFileChooser.APPROVE_OPTION) {return;}
+		File file = picker.getSelectedFile();
+		new EditorUI(file);
 	}
 }

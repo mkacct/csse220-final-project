@@ -50,8 +50,12 @@ public class EditorUI extends JFrame {
 		}
 	}
 
-	public EditorUI() {
-		this(new Individual(20));
+	/**
+	 * Construct with new indiv of given size
+	 * @param size
+	 */
+	public EditorUI(int size) {
+		this(new Individual(size));
 	}
 
 	/**
