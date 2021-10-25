@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -18,6 +19,7 @@ import SimComponents.Individual;
 
 /**
  * Window for editing an individual
+ * 
  * @author R_002
  */
 public class EditorUI extends JFrame {
@@ -28,7 +30,8 @@ public class EditorUI extends JFrame {
 	private ChromosomeEditor editor;
 
 	/**
-	 * Menu bar shown at the bottom of the editor, with options for saving and mutation
+	 * Menu bar shown at the bottom of the editor, with options for saving and
+	 * mutation
 	 */
 	private class EditorOptions extends JPanel {
 		EditorOptions() {
@@ -36,17 +39,21 @@ public class EditorUI extends JFrame {
 			JButton save = new JButton("Save");
 			save.addActionListener(new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent e) {EditorUI.this.save();}
+				public void actionPerformed(ActionEvent e) {
+					EditorUI.this.save();
+				}
 			});
 			this.add(save);
-			
+
 			JButton saveAs = new JButton("Save as...");
 			saveAs.addActionListener(new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent e) {EditorUI.this.saveAs();}
+				public void actionPerformed(ActionEvent e) {
+					EditorUI.this.saveAs();
+				}
 			});
 			this.add(saveAs);
-			
+
 			JLabel mLabel = new JLabel("Mutation rate:");
 			this.add(mLabel);
 			JTextField mutate = new JTextField("0", 5);
@@ -54,10 +61,9 @@ public class EditorUI extends JFrame {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					EditorUI.this.mutationRate = MiscUtil.parseProportion(mutate.getText());
-					EditorUI.this.editor.handleMutate(EditorUI.this.mutationRate);
+					EditorUI.this.mutate(MiscUtil.parseProportion(mutate.getText()));
 				}
-				
+
 			});
 			this.add(mutate);
 		}
@@ -65,6 +71,7 @@ public class EditorUI extends JFrame {
 
 	/**
 	 * Construct with new indiv of given size
+	 * 
 	 * @param size
 	 */
 	public EditorUI(int size) {
@@ -73,6 +80,7 @@ public class EditorUI extends JFrame {
 
 	/**
 	 * Construct with indiv to edit
+	 * 
 	 * @param indiv to edit
 	 */
 	public EditorUI(Individual indiv) {
@@ -85,6 +93,7 @@ public class EditorUI extends JFrame {
 
 	/**
 	 * Construct by loading from file
+	 * 
 	 * @param saveFile to load
 	 */
 	public EditorUI(File saveFile) {
@@ -105,6 +114,22 @@ public class EditorUI extends JFrame {
 		this.add(new EditorOptions(), BorderLayout.SOUTH);
 		this.pack();
 		this.setVisible(true);
+	}
+
+	/**
+	 * Handles mutation at the given rate, and catches if the input was incorrect
+	 * 
+	 * @param rate
+	 */
+	public void mutate(double rate) {
+		if (rate == -1) {
+			JOptionPane.showMessageDialog(EditorUI.this, "Input contained unrecognized character");
+		} else if (rate == -2) {
+			JOptionPane.showMessageDialog(EditorUI.this, "Mutation rate must be between 0 and 1");
+		} else {
+			this.mutationRate = rate;
+			EditorUI.this.editor.handleMutate(EditorUI.this.mutationRate);
+		}
 	}
 
 	/**
@@ -131,7 +156,9 @@ public class EditorUI extends JFrame {
 	private void saveAs() {
 		JFileChooser saver = new JFileChooser();
 		int returnVal = saver.showSaveDialog(this);
-		if (returnVal != JFileChooser.APPROVE_OPTION) {return;}
+		if (returnVal != JFileChooser.APPROVE_OPTION) {
+			return;
+		}
 		File file = saver.getSelectedFile();
 		this.saveFile = file;
 		this.updateWindowTitle();

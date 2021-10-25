@@ -50,7 +50,7 @@ public class MiscUtil {
 				return -1;
 			}
 		}
-		if (prop > 1) {
+		if (prop > 1 || prop < 0) {
 			return -2;
 		}
 		return prop;
