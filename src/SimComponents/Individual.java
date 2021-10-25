@@ -1,5 +1,5 @@
 package SimComponents;
-
+import Main.MiscUtil;
 /**
  * Class: Individual
  * 
@@ -84,7 +84,7 @@ public class Individual {
 	 * @param bit <br>
 	 *            bit is between 0 and the size of the chromosome
 	 */
-	public void flipBit(int bit) {
+	private void flipBitRandom(int bit) {
 		char set;
 		do {
 			set = charSet[(int) (Math.random() * charSet.length)];
@@ -92,6 +92,9 @@ public class Individual {
 		chromosome[bit] = set;
 	}
 	
+	public void flipBit(int bit) {
+		chromosome[bit] = charSet[(MiscUtil.arrayIndexOf(charSet, chromosome[bit])+1)%charSet.length];
+	}
 	/**
 	 * Mutates the chromosome. Each bit has a chance of flipping equal to rate.
 	 * @param rate
@@ -100,7 +103,7 @@ public class Individual {
 	public void mutate(double rate) {
 		for(int i = 0; i < chromosome.length; i++) {
 			if(Math.random() < rate) {
-				this.flipBit(i);
+				this.flipBitRandom(i);
 			}
 		}
 	}

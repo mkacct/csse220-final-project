@@ -8,8 +8,10 @@ import java.io.File;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import Main.FileUtil;
+import Main.MiscUtil;
 import SimComponents.Individual;
 
 /**
@@ -36,6 +38,17 @@ public class EditorUI extends JFrame {
 			this.add(save);
 			
 			JButton mutate = new JButton("Mutate");
+			JTextField rate = new JTextField("0");
+			rate.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					EditorUI.this.mutationRate = MiscUtil.parseProportion(rate.getText());
+					EditorUI.this.indiv.mutate(EditorUI.this.mutationRate);
+				}
+				
+			});
+			this.add(rate);
 			mutate.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {indiv.mutate(EditorUI.this.mutationRate);}
