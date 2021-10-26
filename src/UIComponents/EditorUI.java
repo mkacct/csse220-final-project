@@ -23,12 +23,8 @@ import SimComponents.Individual;
  * @author R_002
  */
 public class EditorUI extends JFrame {
-	private final String DEFAULT_MUTATION_RATE = "0";
-
 	private Individual indiv;
 	private File saveFile;
-	private double mutationRate;
-	
 	private ChromosomeEditor editor;
 
 	/**
@@ -58,7 +54,7 @@ public class EditorUI extends JFrame {
 
 			this.add(new JLabel("Mutation rate:"));
 			
-			JTextField mutate = new JTextField(EditorUI.this.DEFAULT_MUTATION_RATE, 5);
+			JTextField mutate = new JTextField("0", 5);
 			ActionListener mutateListener = new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -91,7 +87,6 @@ public class EditorUI extends JFrame {
 		super();
 		this.indiv = indiv;
 		this.saveFile = null;
-		this.mutationRate = MiscUtil.parseProportion(this.DEFAULT_MUTATION_RATE);
 		this.setup();
 	}
 
@@ -110,7 +105,6 @@ public class EditorUI extends JFrame {
 		}
 		this.indiv = indiv;
 		this.saveFile = saveFile;
-		this.mutationRate = MiscUtil.parseProportion(this.DEFAULT_MUTATION_RATE);
 		this.setup();
 	}
 
@@ -137,10 +131,9 @@ public class EditorUI extends JFrame {
 			JOptionPane.showMessageDialog(EditorUI.this, "Input contained unrecognized character");
 		} else if (rate == -2) {
 			JOptionPane.showMessageDialog(EditorUI.this, "Mutation rate must be between 0 and 1");
-		} else {
-			this.mutationRate = rate;
-			EditorUI.this.editor.handleMutate(EditorUI.this.mutationRate);
-			if(this.mutationRate != 0) this.setTitle(this.getTitle().contains("mutated") ? this.getTitle() : this.getTitle() + " (mutated)");
+		} else if (rate != 0) {
+			this.editor.handleMutate(rate);
+			this.setTitle(this.getTitle().contains("mutated") ? this.getTitle() : this.getTitle() + " (mutated)");
 		}
 	}
 
