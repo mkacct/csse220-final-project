@@ -140,6 +140,7 @@ public class EditorUI extends JFrame {
 		} else {
 			this.mutationRate = rate;
 			EditorUI.this.editor.handleMutate(EditorUI.this.mutationRate);
+			if(this.mutationRate != 0) this.setTitle(this.getTitle().contains("mutated") ? this.getTitle() : this.getTitle() + " (mutated)");
 		}
 	}
 
