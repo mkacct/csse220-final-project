@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import Main.App;
 
 /**
- * Main window of the application
+ * Main window of the application, with title text and main menu buttons
  * @author R_002
  */
 public class MainUI extends JFrame {
@@ -28,7 +28,7 @@ public class MainUI extends JFrame {
 		Header() {
 			super();
 			this.setLayout(new GridLayout(3, 1));
-			JLabel title = new JLabel(App.TITLE, JLabel.CENTER);
+			JLabel title = new JLabel(App.LONG_TITLE, JLabel.CENTER);
 			title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
 			this.add(title);
 			this.add(new JLabel("by " + App.TEAM_ID, JLabel.CENTER));
@@ -67,6 +67,7 @@ public class MainUI extends JFrame {
 		this.add(new Header(), BorderLayout.NORTH);
 		this.add(new MainMenu(), BorderLayout.SOUTH);
 		this.pack();
+		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 	}

@@ -7,6 +7,7 @@ import UIComponents.MainUI;
  */
 public class App {
 	public static final String TITLE = "Genetic Algorithm Sim";
+	public static final String LONG_TITLE = "Genetic Algorithm Simulator";
 	public static final String TEAM_ID = "R_002";
 	public static final String AUTHOR = "Sarah Collins and Madeline Kahn";
 

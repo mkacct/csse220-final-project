@@ -3,6 +3,7 @@ package Main;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import SimComponents.Individual;
@@ -15,7 +16,7 @@ public class FileUtil {
 	/**
 	 * Load an individual from file
 	 * @param file to load
-	 * @return the individual
+	 * @return the individual, or null if the file is of invalid format
 	 */
 	public static Individual loadIndiv(File file) {
 		Scanner scanner;
@@ -24,9 +25,23 @@ public class FileUtil {
 		} catch (FileNotFoundException err) {
 			return null;
 		}
-		char[] charSet = scanner.nextLine().toCharArray();
-		char[] chromosome = scanner.nextLine().toCharArray();
+		char[] charSet;
+		char[] chromosome;
+		try {
+			charSet = scanner.nextLine().toCharArray();
+			chromosome = scanner.nextLine().toCharArray();
+		} catch (NoSuchElementException err) { // file too short
+			scanner.close();
+			return null;
+		}
+		if (scanner.hasNextLine()) { // file too long
+			scanner.close();
+			return null;
+		}
 		scanner.close();
+		for (char c : chromosome) { // validation of chromosome
+			if (MiscUtil.arrayIndexOf(charSet, c) == -1) {return null;}
+		}
 		return new Individual(chromosome, charSet);
 	}
 
