@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -13,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import Exceptions.FileFormatException;
 import Main.FileUtil;
 import Main.MiscUtil;
 import SimComponents.Individual;
@@ -97,8 +99,14 @@ public class EditorUI extends JFrame {
 	 */
 	public EditorUI(File saveFile) {
 		super();
-		Individual indiv = FileUtil.loadIndiv(saveFile);
-		if (indiv == null) {
+		Individual indiv = null;
+		try {
+			indiv = FileUtil.loadIndiv(saveFile);
+		} catch (FileNotFoundException ex) {
+			ex.printStackTrace(); // shouldn't happen
+			this.dispose();
+			return;
+		} catch (FileFormatException ex) {
 			JOptionPane.showMessageDialog(this, "Indiv file \"" + saveFile.getName() + "\" is incorrectly formatted");
 			this.dispose();
 			return;
