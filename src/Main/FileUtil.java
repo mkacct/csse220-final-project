@@ -17,7 +17,9 @@ public class FileUtil {
 	/**
 	 * Load an individual from file
 	 * @param file to load
-	 * @return the individual, or null if the file is of invalid format
+	 * @return the individual
+	 * @throws FileNotFoundException if file does not exist
+	 * @throws FileFormatException if file is not of correct format for an indiv
 	 */
 	public static Individual loadIndiv(File file) throws FileNotFoundException, FileFormatException {
 		Scanner scanner;

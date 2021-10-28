@@ -72,7 +72,7 @@ public class EditorUI extends JFrame {
 	}
 
 	/**
-	 * Construct with new indiv of given size
+	 * Construct with a new indiv of given size
 	 * 
 	 * @param size
 	 */
@@ -81,7 +81,7 @@ public class EditorUI extends JFrame {
 	}
 
 	/**
-	 * Construct with indiv to edit
+	 * Construct with an indiv to edit
 	 * 
 	 * @param indiv to edit
 	 */
@@ -93,7 +93,7 @@ public class EditorUI extends JFrame {
 	}
 
 	/**
-	 * Construct by loading from file
+	 * Construct by loading an indiv from file
 	 * If file is invalid, show an error dialog and close the window
 	 * @param saveFile to load
 	 */
