@@ -1,5 +1,12 @@
 package SimComponents;
 
+/**
+ * Calculates the fitness of an individual based on the number of 1s in its
+ * chromosome
+ * 
+ * @author R002
+ *
+ */
 public class FitnessFunctionSimple implements FitnessFunction {
 
 	public FitnessFunctionSimple() {

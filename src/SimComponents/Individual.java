@@ -181,12 +181,16 @@ public class Individual {
 	}
 
 	/**
-	 * Returns a copy of the individual.
+	 * Returns a copy of the individual mutated at the given rate.
 	 * 
+	 * @param rate <br>
+	 *             0 <= rate <= 1
 	 * @return Individual
 	 */
-	public Individual create() {
-		return new Individual(this.getChromosome(), this.getCharSet());
+	public Individual create(double rate) {
+		Individual child = new Individual(this.getChromosome(), this.getCharSet());
+		child.mutate(rate);
+		return child;
 	}
 
 	/**
