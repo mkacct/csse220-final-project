@@ -188,4 +188,12 @@ public class Individual {
 	public Individual create() {
 		return new Individual(this.getChromosome(), this.getCharSet());
 	}
+
+	/**
+	 * Return a string describing the indiv, for debugging
+	 */
+	@Override
+	public String toString() {
+		return "Indiv w" + charSet.toString() + "> \"" + chromosome.toString() + "\"";
+	}
 }

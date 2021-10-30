@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Sim {
+	public static final String[] FF_NAMES = {"Simple"};
+	public static final String[] SELECTOR_NAMES = {"Truncation", "Roulette wheel", "Ranked"};
+	public static final String[] CROSSOVER_NAMES = {"None", "One point"};
 
 	ArrayList<Individual> pop;
 	

@@ -30,12 +30,10 @@ public class EditorUI extends JFrame {
 	private ChromosomeEditor editor;
 
 	/**
-	 * Menu bar shown at the bottom of the editor, with options for saving and
-	 * mutation
+	 * Menu bar shown at the bottom of the editor, with options for saving and mutation
 	 */
 	private class EditorOptions extends JPanel {
 		EditorOptions() {
-
 			JButton save = new JButton("Save");
 			save.addActionListener(new ActionListener() {
 				@Override
@@ -77,7 +75,7 @@ public class EditorUI extends JFrame {
 	 * @param size
 	 */
 	public EditorUI(int size) {
-		this(new Individual(size, false));
+		this(new Individual(size));
 	}
 
 	/**

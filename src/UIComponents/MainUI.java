@@ -43,6 +43,13 @@ public class MainUI extends JFrame {
 		MainMenu() {
 			super();
 
+			JButton newSim = new JButton("New Sim");
+			newSim.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {MainUI.this.newSim();}
+			});
+			this.add(newSim);
+
 			JButton newEditor = new JButton("New Indiv");
 			newEditor.addActionListener(new ActionListener() {
 				@Override
@@ -70,6 +77,13 @@ public class MainUI extends JFrame {
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
+	}
+
+	/**
+	 * Open a sim config window, asking the user for info to make a new sim
+	 */
+	private void newSim() {
+		new SimConfigUI();
 	}
 
 	/**
