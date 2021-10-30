@@ -15,12 +15,15 @@ import javax.swing.JTextField;
 
 import SimComponents.Sim;
 
+/**
+ * Window for setting up a new sim
+ * @author R_002
+ */
 public class SimConfigUI extends JFrame {
 	private SimConfigForm form;
 	
 	/**
-	 * Menu bar shown at the bottom of the editor, with options for saving and
-	 * mutation
+	 * The form fields that the user puts their preferences in
 	 */
 	private class SimConfigForm extends JPanel {
 		private JTextField chromosomeSize;
@@ -59,8 +62,20 @@ public class SimConfigUI extends JFrame {
 
 			this.setLayout(new GridLayout(this.getComponentCount() / 2, 2));
 		}
+
+		// don't actually know if I want to do it this way...
+
+		// public int getChromosomeSize() {}
+		// public int getPopSize() {}
+		// public String getFitnessFunction() {}
+		// public String getSelectionMode() {}
+		// public String getCrossoverMode() {}
+		// public double getMutationRate() {}
 	}
 
+	/**
+	 * The "Cancel" and "OK" buttons at the bottom of the config window
+	 */
 	private class SimConfigConfirmation extends JPanel {
 		SimConfigConfirmation() {
 			JButton cancel = new JButton("Cancel");
