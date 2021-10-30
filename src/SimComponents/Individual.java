@@ -1,5 +1,7 @@
 package SimComponents;
 
+import java.util.Random;
+
 import Main.MiscUtil;
 
 /**
@@ -17,32 +19,42 @@ public class Individual {
 	char[] charSet;
 
 	/**
-	 * Creates an individual with default potential characters 0 and 1. If random is
-	 * true, initializes a chromosome of length size with random values of 0 and 1.
-	 * If random is false, initializes a chromosome with all values 0
+	 * Creates an individual with default potential characters 0 and 1. Initializes
+	 * a chromosome with all values 0
 	 * 
 	 * @param size   <br>
 	 *               Constraints: size >= 0
 	 * @param random
 	 */
-	public Individual(int size, boolean random) {
+	public Individual(int size) {
 		this.chromosome = new char[size];
 		char[] charSet = { '0', '1' };
 		this.charSet = charSet;
-		if (random) {
-			this.initializeRandom();
-		} else {
-			for (int i = 0; i < chromosome.length; i++) {
-				this.chromosome[i] = this.charSet[0];
-			}
+		for (int i = 0; i < chromosome.length; i++) {
+			this.chromosome[i] = this.charSet[0];
 		}
 	}
 
 	/**
+	 * Creates an individual with default potential characters 0 and 1. Uses the
+	 * random object input to randomly initialize a chromosoe of length size to
+	 * random values of 0 and 1.
+	 * 
+	 * @param size <br>
+	 *             Constraints: size >= 0
+	 * @param rnd
+	 */
+	public Individual(int size, Random rnd) {
+		this.chromosome = new char[size];
+		char[] charSet = { '0', '1' };
+		this.charSet = charSet;
+		this.initializeRandom(rnd);
+	}
+
+	/**
 	 * Creates an individual with potential characters contained in charSet.
-	 * Individual is of length size. If random is true, the chromosome is ranomly
-	 * initialized to characters from the charSet. If random is false, the
-	 * chromosome is initialized to the first element of the charSet.
+	 * Individual is of length size. The chromosome is initialized to the first
+	 * element of the charSet.
 	 * 
 	 * @param size    <br>
 	 *                size >= 0
@@ -50,16 +62,29 @@ public class Individual {
 	 *                charSet is not empty
 	 * @param random
 	 */
-	public Individual(int size, char[] charSet, boolean random) {
+	public Individual(int size, char[] charSet) {
 		this.chromosome = new char[size];
 		this.charSet = charSet;
-		if (random) {
-			this.initializeRandom();
-		} else {
-			for (int i = 0; i < chromosome.length; i++) {
-				this.chromosome[i] = this.charSet[0];
-			}
+		for (int i = 0; i < chromosome.length; i++) {
+			this.chromosome[i] = this.charSet[0];
 		}
+	}
+
+	/**
+	 * Creates an individual with potential characters contained in charSet.
+	 * Individual is of length size. The chromosome is initialized to random
+	 * elements of the charSet.
+	 * 
+	 * @param size    <br>
+	 *                size >= 0
+	 * @param charSet <br>
+	 *                charSet is not empty
+	 * @param random
+	 */
+	public Individual(int size, char[] charSet, Random rnd) {
+		this.chromosome = new char[size];
+		this.charSet = charSet;
+		this.initializeRandom(rnd);
 	}
 
 	/**
@@ -90,9 +115,9 @@ public class Individual {
 	/**
 	 * Initializes all bits in the chromosome to random values from the charSet
 	 */
-	private void initializeRandom() {
+	private void initializeRandom(Random rnd) {
 		for (int i = 0; i < this.chromosome.length; i++) {
-			this.chromosome[i] = this.charSet[(int) (Math.random() * this.charSet.length)];
+			this.chromosome[i] = this.charSet[(int) (rnd.nextInt(this.charSet.length))];
 		}
 	}
 
