@@ -89,7 +89,12 @@ public class SimUI extends JFrame {
 							c = Color.black;
 					}
 					g.setColor(c);
-					g.fillRect((int)(i*this.getWidth()/Math.sqrt(chromosome.length)), (int)((num%i)*this.getHeight()/Math.sqrt(chromosome.length)), (int)(this.getWidth()/Math.sqrt(chromosome.length)), (int)(this.getWidth()/Math.sqrt(chromosome.length)));
+					int x = (int)(i*this.getWidth()/Math.sqrt(chromosome.length));
+					int y = (int)((num % Math.sqrt(chromosome.length))*this.getHeight()/Math.sqrt(chromosome.length));
+					int width = (int)(this.getWidth()/Math.sqrt(chromosome.length));
+					int height = (int)(this.getHeight()/Math.sqrt(chromosome.length));
+					g.fillRect(x, y, width, height);
+					num++;
 				}
 			}
 			this.getWidth();
@@ -135,16 +140,13 @@ public class SimUI extends JFrame {
 
 	private class PopulationDisplay extends JPanel {
 		ArrayList<char[]>chromosomes;
-		ArrayList<ChromosomeDisplay> display = new ArrayList<ChromosomeDisplay>();
 		
-		public PopulationDisplay() {
+		public PopulationDisplay(ArrayList<char[]>chromosomes) {
 			GridLayout grid = new GridLayout(0, (int) Math.sqrt(chromosomes.get(0).length));
 			grid.setHgap(0);
 			grid.setVgap(0);
 			this.setLayout(grid);
-			for(int i = 0; i < chromosomes.size(); i++) {
-				this.add(new ChromosomeDisplay(chromosomes.get(i)));
-			}
+			this.updatePopulation(chromosomes);
 		}
 		
 		void updatePopulation(ArrayList<char[]> chromosomes) {
@@ -221,10 +223,11 @@ public class SimUI extends JFrame {
 		this.add(this.graph, BorderLayout.CENTER);
 		this.controls = new SimUI.Controls();
 		this.add(this.controls, BorderLayout.SOUTH);
-		this.populationDisplay = new PopulationDisplay();
-		this.add(this.populationDisplay, BorderLayout.EAST);
 
 		createSim();
+		
+		this.populationDisplay = new PopulationDisplay(this.sim.getChromosomes());
+		this.add(this.populationDisplay, BorderLayout.EAST);
 
 		this.pack();
 		this.setResizable(false);
