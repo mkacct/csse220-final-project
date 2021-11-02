@@ -29,7 +29,7 @@ public class FileUtil {
 		try {
 			charSet = scanner.nextLine().toCharArray();
 			chromosome = scanner.nextLine().toCharArray();
-		} catch (NoSuchElementException err) { // file too short
+		} catch (NoSuchElementException ex) { // file too short
 			scanner.close();
 			throw new FileFormatException();
 		}
@@ -53,8 +53,8 @@ public class FileUtil {
 		PrintWriter pw;
 		try {
 			pw = new PrintWriter(file);
-		} catch (FileNotFoundException err) {
-			err.printStackTrace(); // should not happen
+		} catch (FileNotFoundException ex) {
+			ex.printStackTrace(); // should not happen
 			return;
 		}
 		pw.println(new String(indiv.getCharSet()));
