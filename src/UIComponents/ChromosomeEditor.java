@@ -63,7 +63,7 @@ public class ChromosomeEditor extends JPanel {
 			}
 		};
 
-		// Adds buttons of the correct color
+		// Adds buttons of the correct index
 		char[] chromosome = this.indiv.getChromosome();
 		for (int i = 0; i < chromosome.length; i++) {
 			buttons.add(new JButton(Integer.toString(i)));

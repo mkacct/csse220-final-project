@@ -1,10 +1,16 @@
 package UIComponents;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -44,11 +50,49 @@ public class SimUI extends JFrame {
 	}
 
 	private class Graph extends JPanel {
+
 		public Graph() {
 			
 		}
+
 		void updateGraph() {
-			
+
+		}
+	}
+
+	private class ChromosomeDisplay extends JComponent {
+		private char[] chromosome;
+
+		public ChromosomeDisplay(char[] chromosome) {
+			super();
+			this.chromosome = chromosome;
+		}
+		
+		@Override
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			int num = 0;
+			for(int i = 0; i < Math.sqrt(chromosome.length); i++) {
+				while(num < chromosome.length) {
+					Color c;
+					switch(chromosome[num]) {
+						case '0':
+							c = UIComponents.ChromosomeEditor.ZERO_COLOR;
+							break;
+						case '1':
+							c = UIComponents.ChromosomeEditor.ONE_COLOR;
+							break;
+						case '?':
+							c = UIComponents.ChromosomeEditor.Q_COLOR;
+							break;
+						default:
+							c = Color.black;
+					}
+					g.setColor(c);
+					g.fillRect((int)(i*this.getWidth()/Math.sqrt(chromosome.length)), (int)((num%i)*this.getHeight()/Math.sqrt(chromosome.length)), (int)(this.getWidth()/Math.sqrt(chromosome.length)), (int)(this.getWidth()/Math.sqrt(chromosome.length)));
+				}
+			}
+			this.getWidth();
 		}
 	}
 
@@ -74,6 +118,7 @@ public class SimUI extends JFrame {
 			this.reset.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {SimUI.this.promptReset();}
+
 			});
 			this.add(this.reset);
 
@@ -87,11 +132,28 @@ public class SimUI extends JFrame {
 			this.reset.setEnabled(SimUI.this.simState != 0);
 		}
 	}
-	
+
 	private class PopulationDisplay extends JPanel {
-		void updatePopulation() {
-			
+		ArrayList<char[]>chromosomes;
+		ArrayList<ChromosomeDisplay> display = new ArrayList<ChromosomeDisplay>();
+		
+		public PopulationDisplay() {
+			GridLayout grid = new GridLayout(0, (int) Math.sqrt(chromosomes.get(0).length));
+			grid.setHgap(0);
+			grid.setVgap(0);
+			this.setLayout(grid);
+			for(int i = 0; i < chromosomes.size(); i++) {
+				this.add(new ChromosomeDisplay(chromosomes.get(i)));
+			}
 		}
+		
+		void updatePopulation(ArrayList<char[]> chromosomes) {
+			this.chromosomes = chromosomes;
+			this.removeAll();
+			for(int i = 0; i < chromosomes.size(); i++) {
+				this.add(new ChromosomeDisplay(chromosomes.get(i)));
+			}
+		}	
 	}
 
 	private void createSim() {
