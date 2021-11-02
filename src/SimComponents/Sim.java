@@ -43,7 +43,7 @@ public class Sim {
 		this.selectionType = "Truncation";
 		this.mutationRate = rate;
 		fitnessTracker = new ArrayList<double[]>();
-		double[] fitness = {this.getMinFitness(), this.getAvgFitness(),this.getMaxFitness()};
+		double[] fitness = { this.getMinFitness(), this.getAvgFitness(), this.getMaxFitness() };
 		fitnessTracker.add(fitness);
 	}
 
@@ -66,7 +66,7 @@ public class Sim {
 		this.selectionType = "Truncation";
 		this.mutationRate = rate;
 		fitnessTracker = new ArrayList<double[]>();
-		double[] fitness = {this.getMinFitness(), this.getAvgFitness(),this.getMaxFitness()};
+		double[] fitness = { this.getMinFitness(), this.getAvgFitness(), this.getMaxFitness() };
 		fitnessTracker.add(fitness);
 	}
 
@@ -88,7 +88,7 @@ public class Sim {
 		this.selectionType = selectionType;
 		this.mutationRate = rate;
 		fitnessTracker = new ArrayList<double[]>();
-		double[] fitness = {this.getMinFitness(), this.getAvgFitness(),this.getMaxFitness()};
+		double[] fitness = { this.getMinFitness(), this.getAvgFitness(), this.getMaxFitness() };
 		fitnessTracker.add(fitness);
 	}
 
@@ -116,7 +116,7 @@ public class Sim {
 		this.selectionType = selectionType;
 		this.mutationRate = rate;
 		fitnessTracker = new ArrayList<double[]>();
-		double[] fitness = {this.getMinFitness(), this.getAvgFitness(),this.getMaxFitness()};
+		double[] fitness = { this.getMinFitness(), this.getAvgFitness(), this.getMaxFitness() };
 		fitnessTracker.add(fitness);
 	}
 
@@ -145,16 +145,14 @@ public class Sim {
 			pop.add(child1);
 			pop.add(child2);
 		}
-		double[] fitness = {this.getMinFitness(), this.getAvgFitness(),this.getMaxFitness()};
+		double[] fitness = { this.getMinFitness(), this.getAvgFitness(), this.getMaxFitness() };
 		fitnessTracker.add(fitness);
 	}
 
 //	Fairly sure these are unneeded here; should remove eventually but leaving for now as reference
 	/**
-//	 * Cycles through the next n generations
-//	 * 
-//	 * @param n
-//	 */
+	 * // * Cycles through the next n generations // * // * @param n //
+	 */
 //	public void nextGens(int n) {
 //		for (int i = 0; i < n; i++) {
 //			this.nextGen();
@@ -218,13 +216,31 @@ public class Sim {
 	}
 
 	/**
+	 * Returns the chromosome of the individual with the best fitness. If multiple
+	 * have the same fitness, returns the first of them
+	 * 
+	 * @return
+	 */
+	public char[] getBestChromosome() {
+		int max = 0;
+		char[] bestChromosome = pop.get(0).getChromosome();
+		for (Individual indiv : pop) {
+			if (fitnessCalc.calcFitness(indiv) > max) {
+				max = fitnessCalc.calcFitness(indiv);
+				bestChromosome = indiv.getChromosome();
+			}
+		}
+		return bestChromosome;
+	}
+
+	/**
 	 * Returns the top half of the population by fitness
 	 * 
 	 * @return
 	 */
 	private ArrayList<Individual> truncationSelection() {
 		pop.sort(compare);
-		ArrayList<Individual> parents = (ArrayList<Individual>) pop.subList(pop.size() / 2, pop.size());
+		ArrayList<Individual> parents = new ArrayList<Individual>(pop.subList(pop.size() / 2, pop.size()));
 		return parents;
 	}
 
@@ -275,15 +291,29 @@ public class Sim {
 	}
 
 	/**
-	 * Utility method returning the fitness function with the given name
-	 * Uncertain if this is permanent
+	 * Returns an arraylist of chromosome char arrays
+	 * 
+	 * @return
+	 */
+	public ArrayList<char[]> getChromosomes() {
+		ArrayList<char[]> chromosomes = new ArrayList<char[]>();
+		for (int i = 0, size = pop.size(); i < size; i++) {
+			chromosomes.add(pop.get(i).getChromosome());
+		}
+		return chromosomes;
+	}
+
+	/**
+	 * Utility method returning the fitness function with the given name Uncertain
+	 * if this is permanent
+	 * 
 	 * @param name the name of the fitness function
 	 * @return a new instance of the fitness function
 	 */
 	public static FitnessFunction ffByName(String name) {
 		switch (name) {
-			case "Simple":
-				return new FitnessFunctionSimple();
+		case "Simple":
+			return new FitnessFunctionSimple();
 		}
 		throw new IllegalArgumentException("Invalid fitness function name \"" + name + "\"");
 	}
@@ -291,8 +321,6 @@ public class Sim {
 }
 
 /*
- * Add a way to store past min, max, and average values 
- * work on displaying population 
- * Work on graph if maddie hasn't
- * figure out ranked voting
+ * Add a way to store past min, max, and average values work on displaying
+ * population Work on graph if maddie hasn't figure out ranked voting
  */
