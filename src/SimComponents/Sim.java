@@ -251,6 +251,21 @@ public class Sim {
 	private ArrayList<Individual> rankedSelection() {
 		return pop;
 	}
+
+	/**
+	 * Utility method returning the fitness function with the given name
+	 * Uncertain if this is permanent
+	 * @param name the name of the fitness function
+	 * @return a new instance of the fitness function
+	 */
+	public static FitnessFunction ffByName(String name) {
+		switch (name) {
+			case "Simple":
+				return new FitnessFunctionSimple();
+		}
+		throw new IllegalArgumentException("Invalid fitness function name \"" + name + "\"");
+	}
+
 }
 
 

@@ -13,6 +13,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import Exceptions.DomainException;
+import Exceptions.FormValidationException;
+import Exceptions.InvalidInputException;
+import Main.MiscUtil;
+import SimComponents.FitnessFunction;
+import SimComponents.FitnessFunctionSimple;
 import SimComponents.Sim;
 
 /**
@@ -20,20 +26,17 @@ import SimComponents.Sim;
  * @author R_002
  */
 public class SimConfigUI extends JFrame {
-	private SimConfigForm form;
+	private SimConfigUI.ConfigForm form;
 	
 	/**
 	 * The form fields that the user puts their preferences in
 	 */
-	private class SimConfigForm extends JPanel {
-		private JTextField chromosomeSize;
-		private JTextField popSize;
-		private JComboBox<String> fitnessFunction;
-		private JComboBox<String> selector;
-		private JComboBox<String> crossover;
+	private class ConfigForm extends JPanel {
+		private JTextField chromosomeSize, popSize;
+		private JComboBox<String> fitnessFunction, selector, crossover;
 		private JTextField mutationRate;
 
-		SimConfigForm() {
+		ConfigForm() {
 			super();
 
 			this.add(new JLabel("Chromosome size"));
@@ -63,14 +66,13 @@ public class SimConfigUI extends JFrame {
 			this.setLayout(new GridLayout(this.getComponentCount() / 2, 2));
 		}
 
-		// don't actually know if I want to do it this way...
-
-		// public int getChromosomeSize() {}
-		// public int getPopSize() {}
-		// public String getFitnessFunction() {}
-		// public String getSelectionMode() {}
-		// public String getCrossoverMode() {}
-		// public double getMutationRate() {}
+		// get form values
+		public int getChromosomeSize() throws NumberFormatException {return Integer.parseInt(chromosomeSize.getText());}
+		public int getPopSize() throws NumberFormatException {return Integer.parseInt(popSize.getText());}
+		public String getFitnessFunction() {return (String) fitnessFunction.getSelectedItem();}
+		public String getSelectionMode() {return (String) selector.getSelectedItem();}
+		public String getCrossoverMode() {return (String) crossover.getSelectedItem();}
+		public double getMutationRate() throws NumberFormatException, DomainException {return MiscUtil.parseProportion(mutationRate.getText());}
 	}
 
 	/**
@@ -97,15 +99,56 @@ public class SimConfigUI extends JFrame {
 	public SimConfigUI() {
 		super();
 		this.setTitle("Create New Sim");
-		this.form = new SimConfigForm();
+		this.form = new ConfigForm();
 		this.add(this.form, BorderLayout.NORTH);
-		this.add(new SimConfigConfirmation(), BorderLayout.SOUTH);
+		this.add(new SimConfigUI.SimConfigConfirmation(), BorderLayout.SOUTH);
 		this.pack();
 		this.setResizable(false);
 		this.setVisible(true);
 	}
 
+	/**
+	 * Checks if the user input in the form is valid, if it is valid does nothing
+	 * @throws FormValidationException if it's invalid
+	 */
+	private void validateForm() throws FormValidationException {
+		try {
+			int chromosomeSize = this.form.getChromosomeSize();
+			int popSize = this.form.getChromosomeSize();
+			if (!((chromosomeSize > 0) && (popSize > 0))) {throw new InvalidInputException();}
+		} catch (NumberFormatException | InvalidInputException ex) {
+			throw new FormValidationException("Size values must be positive integers");
+		}
+		try {
+			this.form.getMutationRate();
+		} catch (NumberFormatException ex) {
+			throw new FormValidationException("Mutation rate format is invalid");
+		} catch (DomainException ex) {
+			throw new FormValidationException("Mutation rate must be between 0 and 1");
+		}
+	}
+
+	/**
+	 * Handles form submission
+	 * If the form is invalid, shows an error dialog
+	 * If the form is valid, makes a new sim using the configuration
+	 */
 	private void submit() {
-		JOptionPane.showMessageDialog(this, "you can't do that");
+		try {
+			validateForm();
+		} catch (FormValidationException ex) {
+			JOptionPane.showMessageDialog(this, ex.getMessage());
+			return;
+		}
+		// form input is valid
+		Sim sim = new Sim(
+			this.form.getPopSize(),
+			this.form.getChromosomeSize(),
+			this.form.getMutationRate(),
+			Sim.ffByName(this.form.getFitnessFunction()),
+			this.form.getSelectionMode()
+		);
+		new SimUI(sim);
+		this.dispose();
 	}
 }

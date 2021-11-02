@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import Exceptions.DomainException;
 import Exceptions.FileFormatException;
 import Main.FileUtil;
 import Main.MiscUtil;
@@ -58,7 +59,7 @@ public class EditorUI extends JFrame {
 			ActionListener mutateListener = new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					EditorUI.this.mutate(MiscUtil.parseProportion(mutate.getText()));
+					EditorUI.this.mutate(mutate.getText());
 				}
 			};
 			mutate.addActionListener(mutateListener);
@@ -121,7 +122,7 @@ public class EditorUI extends JFrame {
 		this.editor = new ChromosomeEditor(indiv);
 		this.updateWindowTitle();
 		this.add(this.editor, BorderLayout.CENTER);
-		this.add(new EditorOptions(), BorderLayout.SOUTH);
+		this.add(new EditorUI.EditorOptions(), BorderLayout.SOUTH);
 		this.pack();
 		this.setResizable(false);
 		this.setVisible(true);
@@ -132,15 +133,19 @@ public class EditorUI extends JFrame {
 	 * 
 	 * @param rate
 	 */
-	public void mutate(double rate) {
-		if (rate == -1) {
+	public void mutate(String rate) {
+		double parsedRate;
+		try {
+			parsedRate = MiscUtil.parseProportion(rate);
+		} catch (NumberFormatException ex) {
 			JOptionPane.showMessageDialog(EditorUI.this, "Input contained unrecognized character");
-		} else if (rate == -2) {
+			return;
+		} catch (DomainException ex) {
 			JOptionPane.showMessageDialog(EditorUI.this, "Mutation rate must be between 0 and 1");
-		} else if (rate != 0) {
-			this.editor.handleMutate(rate);
-			this.setTitle(this.getTitle().contains("mutated") ? this.getTitle() : this.getTitle() + " (mutated)");
+			return;
 		}
+		this.editor.handleMutate(parsedRate);
+		// this.setTitle(this.getTitle().contains("mutated") ? this.getTitle() : this.getTitle() + " (mutated)");
 	}
 
 	/**

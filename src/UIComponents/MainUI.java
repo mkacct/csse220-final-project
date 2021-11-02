@@ -71,8 +71,8 @@ public class MainUI extends JFrame {
 	public MainUI() {
 		super();
 		this.setTitle(App.TITLE);
-		this.add(new Header(), BorderLayout.NORTH);
-		this.add(new MainMenu(), BorderLayout.SOUTH);
+		this.add(new MainUI.Header(), BorderLayout.NORTH);
+		this.add(new MainUI.MainMenu(), BorderLayout.SOUTH);
 		this.pack();
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
