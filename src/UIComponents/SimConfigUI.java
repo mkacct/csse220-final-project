@@ -17,8 +17,6 @@ import Exceptions.DomainException;
 import Exceptions.FormValidationException;
 import Exceptions.InvalidInputException;
 import Main.MiscUtil;
-import SimComponents.FitnessFunction;
-import SimComponents.FitnessFunctionSimple;
 import SimComponents.Sim;
 
 /**
@@ -131,7 +129,7 @@ public class SimConfigUI extends JFrame {
 	/**
 	 * Handles form submission
 	 * If the form is invalid, shows an error dialog
-	 * If the form is valid, makes a new sim using the configuration
+	 * If the form is valid, makes a new sim using the configuration, and closes this window
 	 */
 	private void submit() {
 		try {
