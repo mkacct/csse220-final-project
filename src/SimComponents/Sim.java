@@ -2,6 +2,7 @@ package SimComponents;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Random;
 
 public class Sim {
@@ -211,7 +212,35 @@ public class Sim {
 	 * @return
 	 */
 	private ArrayList<Individual> rouletteSelection() {
-		return pop;
+		int num = 0;
+		ArrayList<Individual> rouletteWheel = new ArrayList<Individual>();
+		/*
+		 * Constructs a HashMap where each individual is referenced a number of times
+		 * equal to its fitness, so that when a number is randomly picked, the
+		 * probability of each individual being picked is weighted based on its fitness.
+		 */
+		for (Individual indiv : pop) {
+			int fitness = fitnessCalc.calcFitness(indiv);
+			for (int i = 0; i < fitness; i++) {
+				rouletteWheel.add(indiv);
+				num++;
+			}
+		}
+		ArrayList<Individual> parents = new ArrayList<Individual>();
+		/*
+		 * Randomly picks individuals with probabilities weighted by their fitness, adds
+		 * each individual to the parents list if it doesn't have it, and if it does,
+		 * prevents i from incrementing to ensure the right number of individuals end up
+		 * in the parents list.
+		 */
+		for (int i = 0, size = pop.size() / 2; i < size; i++) {
+			if (!parents.contains(rouletteWheel.get((int) (Math.random() * num)))) {
+				parents.add(rouletteWheel.get((int) (Math.random() * num)));
+			} else {
+				i--;
+			}
+		}
+		return parents;
 	}
 
 	/**
@@ -223,3 +252,11 @@ public class Sim {
 		return pop;
 	}
 }
+
+
+/*
+ * Add a way to store past min, max, and average values
+ * figure out ranked voting
+ * work on displaying population
+ * Work on graph if maddie hasn't
+ * */
