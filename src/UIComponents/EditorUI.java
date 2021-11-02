@@ -34,7 +34,7 @@ public class EditorUI extends JFrame {
 	 * Menu bar shown at the bottom of the editor, with options for saving and mutation
 	 */
 	private class EditorOptions extends JPanel {
-		EditorOptions() {
+		public EditorOptions() {
 			JButton save = new JButton("Save");
 			save.addActionListener(new ActionListener() {
 				@Override

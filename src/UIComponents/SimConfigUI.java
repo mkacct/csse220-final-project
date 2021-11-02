@@ -34,7 +34,7 @@ public class SimConfigUI extends JFrame {
 		private JComboBox<String> fitnessFunction, selector, crossover;
 		private JTextField mutationRate;
 
-		ConfigForm() {
+		public ConfigForm() {
 			super();
 
 			this.add(new JLabel("Chromosome size"));
@@ -77,7 +77,7 @@ public class SimConfigUI extends JFrame {
 	 * The "Cancel" and "OK" buttons at the bottom of the config window
 	 */
 	private class SimConfigConfirmation extends JPanel {
-		SimConfigConfirmation() {
+		public SimConfigConfirmation() {
 			JButton cancel = new JButton("Cancel");
 			cancel.addActionListener(new ActionListener() {
 				@Override
@@ -139,14 +139,14 @@ public class SimConfigUI extends JFrame {
 			return;
 		}
 		// form input is valid
-		Sim sim = new Sim(
+		new SimUI(
 			this.form.getPopSize(),
 			this.form.getChromosomeSize(),
-			this.form.getMutationRate(),
-			Sim.ffByName(this.form.getFitnessFunction()),
-			this.form.getSelectionMode()
+			this.form.getFitnessFunction(),
+			this.form.getSelectionMode(),
+			this.form.getCrossoverMode(),
+			this.form.getMutationRate()
 		);
-		new SimUI(sim);
 		this.dispose();
 	}
 }

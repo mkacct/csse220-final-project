@@ -12,7 +12,7 @@ import java.util.Random;
  *         evolution
  */
 public class Sim {
-	public static final String[] FF_NAMES = { "Simple" };
+	public static final String[] FF_NAMES = { "All 1s" };
 	public static final String[] SELECTOR_NAMES = { "Truncation", "Roulette wheel", "Ranked" };
 	public static final String[] CROSSOVER_NAMES = { "None", "One point" };
 
@@ -35,7 +35,7 @@ public class Sim {
 	 */
 	public Sim(double rate) {
 		pop = new ArrayList<Individual>();
-		fitnessCalc = new FitnessFunctionSimple();
+		fitnessCalc = new FitnessFunctionAll1s();
 		for (int i = 0; i < 100; i++) {
 			pop.add(new Individual(100, new Random()));
 		}
@@ -58,7 +58,7 @@ public class Sim {
 	 */
 	public Sim(int popSize, int indivSize, double rate) {
 		pop = new ArrayList<Individual>();
-		fitnessCalc = new FitnessFunctionSimple();
+		fitnessCalc = new FitnessFunctionAll1s();
 		for (int i = 0; i < popSize; i++) {
 			pop.add(new Individual(indivSize, new Random()));
 		}
@@ -312,8 +312,8 @@ public class Sim {
 	 */
 	public static FitnessFunction ffByName(String name) {
 		switch (name) {
-		case "Simple":
-			return new FitnessFunctionSimple();
+		case "All 1s":
+			return new FitnessFunctionAll1s();
 		}
 		throw new IllegalArgumentException("Invalid fitness function name \"" + name + "\"");
 	}

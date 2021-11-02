@@ -25,7 +25,7 @@ public class MainUI extends JFrame {
 	 * Titles and such
 	 */
 	private class Header extends JPanel {
-		Header() {
+		public Header() {
 			super();
 			this.setLayout(new GridLayout(3, 1));
 			JLabel title = new JLabel(App.LONG_TITLE, JLabel.CENTER);
@@ -40,7 +40,7 @@ public class MainUI extends JFrame {
 	 * Menu buttons
 	 */
 	private class MainMenu extends JPanel {
-		MainMenu() {
+		public MainMenu() {
 			super();
 
 			JButton newSim = new JButton("New Sim");

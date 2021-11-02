@@ -15,7 +15,7 @@ public class CompareIndividual implements Comparator<Individual> {
 	 * Creates a new CompareIndividual with the default of a simple fitness function
 	 */
 	public CompareIndividual() {
-		fitnessCalc = new FitnessFunctionSimple();
+		fitnessCalc = new FitnessFunctionAll1s();
 	}
 
 	/**

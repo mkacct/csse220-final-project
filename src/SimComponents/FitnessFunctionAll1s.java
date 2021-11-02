@@ -7,9 +7,9 @@ package SimComponents;
  * @author R002
  *
  */
-public class FitnessFunctionSimple implements FitnessFunction {
+public class FitnessFunctionAll1s implements FitnessFunction {
 
-	public FitnessFunctionSimple() {
+	public FitnessFunctionAll1s() {
 	}
 
 	/**
