@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import SimComponents.Sim;
 
@@ -24,6 +25,9 @@ public class SimUI extends JFrame {
 		Graph() {
 			
 		}
+		void updateGraph() {
+			
+		}
 	}
 
 	private class Controls extends JPanel {
@@ -36,16 +40,34 @@ public class SimUI extends JFrame {
 			this.add(step);
 		}
 	}
-
+	
+	private class PopulationDisplay extends JPanel {
+		void updatePopulation() {
+			
+		}
+	}
+	
 	public SimUI(Sim sim) {
 		super();
 		this.sim = sim;
 		this.setTitle("Sim");
 		this.add(new SimUI.Header(), BorderLayout.NORTH);
-		this.add(new SimUI.Graph(), BorderLayout.CENTER);
+		Graph graph = new SimUI.Graph();
+		this.add(graph, BorderLayout.CENTER);
 		this.add(new SimUI.Controls(), BorderLayout.SOUTH);
+		PopulationDisplay population = new PopulationDisplay();
 		this.pack();
 		this.setResizable(false);
 		this.setVisible(true);
+		Timer timer = new Timer(50, new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				sim.nextGen();
+				graph.updateGraph();
+				population.updatePopulation();
+			}
+			
+		});
 	}
 }

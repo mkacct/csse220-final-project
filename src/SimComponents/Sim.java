@@ -5,18 +5,26 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Random;
 
+/**
+ * Class: Sim
+ * 
+ * @author R_002 <br>
+ *         Holds data for a population of individuals and allows simulation of
+ *         evolution
+ */
 public class Sim {
 	public static final String[] FF_NAMES = { "Simple" };
 	public static final String[] SELECTOR_NAMES = { "Truncation", "Roulette wheel", "Ranked" };
 	public static final String[] CROSSOVER_NAMES = { "None", "One point" };
 
 	private ArrayList<Individual> pop;
+	private ArrayList<double[]> fitnessTracker;
 	private FitnessFunction fitnessCalc;
 	private Comparator<Individual> compare;
 	private double mutationRate;
 	String selectionType;
 	boolean crossover;
-	int elitism;
+	double elitism;
 
 	/**
 	 * Creates a new Sim with population 100 of chromosomes of size 100, with a
@@ -35,6 +43,9 @@ public class Sim {
 		compare = new CompareIndividual(fitnessCalc);
 		this.selectionType = "Truncation";
 		this.mutationRate = rate;
+		fitnessTracker = new ArrayList<double[]>();
+		double[] fitness = {this.getMinFitness(), this.getAvgFitness(),this.getMaxFitness()};
+		fitnessTracker.add(fitness);
 	}
 
 	/**
@@ -55,6 +66,9 @@ public class Sim {
 		compare = new CompareIndividual(fitnessCalc);
 		this.selectionType = "Truncation";
 		this.mutationRate = rate;
+		fitnessTracker = new ArrayList<double[]>();
+		double[] fitness = {this.getMinFitness(), this.getAvgFitness(),this.getMaxFitness()};
+		fitnessTracker.add(fitness);
 	}
 
 	/**
@@ -74,6 +88,9 @@ public class Sim {
 		compare = new CompareIndividual(fitnessCalc);
 		this.selectionType = selectionType;
 		this.mutationRate = rate;
+		fitnessTracker = new ArrayList<double[]>();
+		double[] fitness = {this.getMinFitness(), this.getAvgFitness(),this.getMaxFitness()};
+		fitnessTracker.add(fitness);
 	}
 
 	/**
@@ -99,6 +116,9 @@ public class Sim {
 		compare = new CompareIndividual(fitnessCalc);
 		this.selectionType = selectionType;
 		this.mutationRate = rate;
+		fitnessTracker = new ArrayList<double[]>();
+		double[] fitness = {this.getMinFitness(), this.getAvgFitness(),this.getMaxFitness()};
+		fitnessTracker.add(fitness);
 	}
 
 	/**
@@ -126,31 +146,34 @@ public class Sim {
 			pop.add(child1);
 			pop.add(child2);
 		}
+		double[] fitness = {this.getMinFitness(), this.getAvgFitness(),this.getMaxFitness()};
+		fitnessTracker.add(fitness);
 	}
 
+//	Fairly sure these are unneeded here; should remove eventually but leaving for now as reference
 	/**
-	 * Cycles through the next n generations
-	 * 
-	 * @param n
-	 */
-	public void nextGens(int n) {
-		for (int i = 0; i < n; i++) {
-			this.nextGen();
-		}
-	}
-
-	/**
-	 * Cycles through the generations until the max fitness reaches the fitness
-	 * entered.
-	 * 
-	 * @param fitness <br>
-	 *                Constraints: 0 <= fitness <= 100
-	 */
-	public void nextGensUntil(int fitness) {
-		while (this.getMaxFitness() < fitness) {
-			this.nextGen();
-		}
-	}
+//	 * Cycles through the next n generations
+//	 * 
+//	 * @param n
+//	 */
+//	public void nextGens(int n) {
+//		for (int i = 0; i < n; i++) {
+//			this.nextGen();
+//		}
+//	}
+//
+//	/**
+//	 * Cycles through the generations until the max fitness reaches the fitness
+//	 * entered.
+//	 * 
+//	 * @param fitness <br>
+//	 *                Constraints: 0 <= fitness <= 100
+//	 */
+//	public void nextGensUntil(int fitness) {
+//		while (this.getMaxFitness() < fitness) {
+//			this.nextGen();
+//		}
+//	}
 
 	/**
 	 * Returns the fitness of the most fit chromosome
@@ -268,10 +291,9 @@ public class Sim {
 
 }
 
-
 /*
- * Add a way to store past min, max, and average values
- * figure out ranked voting
- * work on displaying population
+ * Add a way to store past min, max, and average values 
+ * work on displaying population 
  * Work on graph if maddie hasn't
- * */
+ * figure out ranked voting
+ */
