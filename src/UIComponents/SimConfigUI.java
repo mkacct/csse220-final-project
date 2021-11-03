@@ -15,7 +15,6 @@ import javax.swing.JTextField;
 
 import Exceptions.DomainException;
 import Exceptions.FormValidationException;
-import Exceptions.InvalidInputException;
 import Main.MiscUtil;
 import SimComponents.Sim;
 
@@ -113,8 +112,8 @@ public class SimConfigUI extends JFrame {
 		try {
 			int chromosomeSize = this.form.getChromosomeSize();
 			int popSize = this.form.getChromosomeSize();
-			if (!((chromosomeSize > 0) && (popSize > 0))) {throw new InvalidInputException();}
-		} catch (NumberFormatException | InvalidInputException ex) {
+			if (!((chromosomeSize > 0) && (popSize > 0))) {throw new DomainException();}
+		} catch (NumberFormatException | DomainException ex) {
 			throw new FormValidationException("Size values must be positive integers");
 		}
 		try {
