@@ -23,6 +23,10 @@ import Exceptions.DomainException;
 import SimComponents.FitnessFunction;
 import SimComponents.Sim;
 
+/**
+ * Window for actually using the sim
+ * @author R_002
+ */
 public class SimUI extends JFrame {
 	private final int popSize, chromosomeSize;
 	private final String ffName, selectionMode, crossoverMode;
@@ -40,6 +44,9 @@ public class SimUI extends JFrame {
 
 	private Sim sim;
 
+	/**
+	 * Header, with text describing the properties of the sim
+	 */
 	private class Header extends JPanel {
 		public Header() {
 			this.add(new JLabel(
@@ -103,6 +110,10 @@ public class SimUI extends JFrame {
 		}
 	}
 
+	/**
+	 * Controls shown at the bottom of the sim
+	 * Includes start/stop button, step and reset buttons, and fields for customizing running
+	 */
 	private class Controls extends JPanel {
 		private static final String[] START_STOP_BUTTON_TEXT = {"Start", "Pause", "Resume"};
 		private static final String[] RUN_MODES = {"Run forever", "Number of gens:", "Max fitness:"};
@@ -151,6 +162,9 @@ public class SimUI extends JFrame {
 			this.updateElements();
 		}
 
+		/**
+		 * Updates the state (mostly enabled state) of the control UI elements
+		 */
 		public void updateElements() {
 			this.startStop.setEnabled(true);
 			this.startStop.setText(Controls.START_STOP_BUTTON_TEXT[SimUI.this.simState]);
@@ -186,6 +200,9 @@ public class SimUI extends JFrame {
 		}	
 	}
 
+	/**
+	 * Creates the sim object; also handles some other reset things
+	 */
 	private void createSim() {
 		if (this.timer != null) {
 			this.timer.stop();
@@ -202,11 +219,18 @@ public class SimUI extends JFrame {
 		this.setSimState(0);
 	}
 
+	/**
+	 * Sets the sim state value
+	 * @param state one of: 0 = not started, 1 = running, 2 = paused
+	 */
 	private void setSimState(int state) {
 		this.simState = state;
 		this.controls.updateElements();
 	}
 
+	/**
+	 * Does one tick/step/gen
+	 */
 	private void tick() {
 		if (this.simState == 0) {this.setSimState(2);}
 		this.sim.nextGen();
@@ -218,6 +242,9 @@ public class SimUI extends JFrame {
 		this.revalidate();
 	}
 
+	/**
+	 * Listener used by the timer when the sim is running
+	 */
 	private class TimerListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -239,6 +266,10 @@ public class SimUI extends JFrame {
 		}
 	}
 
+	/**
+	 * Starts or stops the sim
+	 * If starting, does validation of the user input first
+	 */
 	private void startStop() {
 		if (this.simState != 1) {
 			// start
@@ -273,6 +304,9 @@ public class SimUI extends JFrame {
 		}
 	}
 
+	/**
+	 * Asks if the user wants to reset, and if so does
+	 */
 	private void promptReset() {
 		int option = JOptionPane.showConfirmDialog(this, "All data and indivs will be discarded!", "You sure?", JOptionPane.OK_CANCEL_OPTION);
 		if (option == JOptionPane.OK_OPTION) {
