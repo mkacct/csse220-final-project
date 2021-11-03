@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 
 import Exceptions.DomainException;
 import Exceptions.FileFormatException;
+import Main.App;
 import Main.FileUtil;
 import Main.MiscUtil;
 import SimComponents.Individual;
@@ -170,7 +171,7 @@ public class EditorUI extends JFrame {
 	 * Save as (show save dialog)
 	 */
 	private void saveAs() {
-		JFileChooser saver = new JFileChooser();
+		JFileChooser saver = new JFileChooser(App.SAVE_DIR);
 		int returnVal = saver.showSaveDialog(this);
 		if (returnVal != JFileChooser.APPROVE_OPTION) {
 			return;

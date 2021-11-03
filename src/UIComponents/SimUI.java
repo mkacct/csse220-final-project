@@ -22,6 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.Timer;
 
 import Exceptions.DomainException;
+import Main.App;
 import SimComponents.FitnessFunction;
 import SimComponents.Sim;
 
@@ -218,13 +219,13 @@ public class SimUI extends JFrame {
 				Color c;
 				switch (chromosome[num]) {
 				case '0':
-					c = UIComponents.ChromosomeEditor.ZERO_COLOR;
+					c = App.ZERO_COLOR;
 					break;
 				case '1':
-					c = UIComponents.ChromosomeEditor.ONE_COLOR;
+					c = App.ONE_COLOR;
 					break;
 				case '?':
-					c = UIComponents.ChromosomeEditor.Q_COLOR;
+					c = App.Q_COLOR;
 					break;
 				default:
 					c = Color.black;

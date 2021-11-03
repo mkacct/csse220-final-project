@@ -110,7 +110,7 @@ public class MainUI extends JFrame {
 	 * Have the user pick a file to open an indiv
 	 */
 	private void openIndiv() {
-		JFileChooser picker = new JFileChooser();
+		JFileChooser picker = new JFileChooser(App.SAVE_DIR);
 		int returnVal = picker.showOpenDialog(MainUI.this);
 		if (returnVal != JFileChooser.APPROVE_OPTION) {return;}
 		File file = picker.getSelectedFile();

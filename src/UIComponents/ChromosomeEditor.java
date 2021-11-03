@@ -1,6 +1,5 @@
 package UIComponents;
 
-import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,6 +8,7 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import Main.App;
 import SimComponents.Individual;
 
 /**
@@ -19,10 +19,6 @@ import SimComponents.Individual;
  *         colored based on their bit value and clicking a button flips the bit.
  */
 public class ChromosomeEditor extends JPanel {
-	public static final Color ZERO_COLOR = new Color(79, 132, 189);
-	public static final Color ONE_COLOR = new Color(229, 119, 225);
-	public static final Color Q_COLOR = new Color(65, 63, 176);
-
 	Individual indiv;
 	ArrayList<JButton> buttons = new ArrayList<JButton>();
 
@@ -51,13 +47,13 @@ public class ChromosomeEditor extends JPanel {
 				// sets button color according to updated bit value
 				switch (chromosome[index]) {
 				case '0':
-					buttons.get(index).setBackground(ZERO_COLOR);
+					buttons.get(index).setBackground(App.ZERO_COLOR);
 					break;
 				case '1':
-					buttons.get(index).setBackground(ONE_COLOR);
+					buttons.get(index).setBackground(App.ONE_COLOR);
 					break;
 				case '?':
-					buttons.get(index).setBackground(Q_COLOR);
+					buttons.get(index).setBackground(App.Q_COLOR);
 					break;
 				}
 			}
@@ -82,13 +78,13 @@ public class ChromosomeEditor extends JPanel {
 		for (int i = 0; i < chromosome.length; i++) {
 			switch (chromosome[i]) {
 			case '0':
-				buttons.get(i).setBackground(ZERO_COLOR);
+				buttons.get(i).setBackground(App.ZERO_COLOR);
 				break;
 			case '1':
-				buttons.get(i).setBackground(ONE_COLOR);
+				buttons.get(i).setBackground(App.ONE_COLOR);
 				break;
 			case '?':
-				buttons.get(i).setBackground(Q_COLOR);
+				buttons.get(i).setBackground(App.Q_COLOR);
 				break;
 			}
 		}
