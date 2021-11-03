@@ -2,6 +2,7 @@ package UIComponents;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -66,14 +67,14 @@ public class SimUI extends JFrame {
 		public ChromosomeDisplay(char[] chromosome) {
 			super();
 			this.chromosome = chromosome;
+			this.setPreferredSize(new Dimension(30,30));
 		}
 		
 		@Override
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			int num = 0;
-			for(int i = 0; i < Math.sqrt(chromosome.length); i++) {
-				while(num < chromosome.length) {
+			
+			for(int num = 0; num < chromosome.length; num++) {
 					Color c;
 					switch(chromosome[num]) {
 						case '0':
@@ -89,15 +90,14 @@ public class SimUI extends JFrame {
 							c = Color.black;
 					}
 					g.setColor(c);
-					int x = (int)(i*this.getWidth()/Math.sqrt(chromosome.length));
-					int y = (int)((num % Math.sqrt(chromosome.length))*this.getHeight()/Math.sqrt(chromosome.length));
+					int x = (int)(num % Math.sqrt(chromosome.length)*(int)(this.getWidth()/Math.sqrt(chromosome.length)));
+					int y = (int)(num / Math.sqrt(chromosome.length))*(int)(this.getHeight()/Math.sqrt(chromosome.length));
 					int width = (int)(this.getWidth()/Math.sqrt(chromosome.length));
 					int height = (int)(this.getHeight()/Math.sqrt(chromosome.length));
 					g.fillRect(x, y, width, height);
-					num++;
-				}
 			}
-			this.getWidth();
+			g.setColor(Color.black);
+			g.drawRect(0,  0,  this.getWidth(), this.getHeight());
 		}
 	}
 
@@ -181,6 +181,7 @@ public class SimUI extends JFrame {
 	private void tick() {
 		if (this.simState == 0) {this.setSimState(2);}
 		this.sim.nextGen();
+		this.populationDisplay.updatePopulation(sim.getChromosomes());
 	}
 
 	private void startStop() {
