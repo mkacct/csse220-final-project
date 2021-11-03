@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,8 +15,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.Timer;
 
+import Exceptions.DomainException;
 import SimComponents.FitnessFunction;
 import SimComponents.Sim;
 
@@ -41,17 +42,16 @@ public class SimUI extends JFrame {
 		public Header() {
 			this.add(new JLabel(
 				"Population size: " + SimUI.this.popSize
-				+ " – Chromosome size: " + SimUI.this.chromosomeSize
-				+ " – Fitness function: " + SimUI.this.ffName
-				+ " – Selection: " + SimUI.this.selectionMode
-				+ " – Crossover: " + SimUI.this.crossoverMode
-				+ " – Mutation rate: " + SimUI.this.mutationRate
+				+ " \u2013 Chromosome size: " + SimUI.this.chromosomeSize
+				+ " \u2013 Fitness function: " + SimUI.this.ffName
+				+ " \u2013 Selection: " + SimUI.this.selectionMode
+				+ " \u2013 Crossover: " + SimUI.this.crossoverMode
+				+ " \u2013 Mutation rate: " + SimUI.this.mutationRate
 			));
 		}
 	}
 
 	private class Graph extends JPanel {
-
 		public Graph() {
 			
 		}
@@ -102,10 +102,13 @@ public class SimUI extends JFrame {
 	}
 
 	private class Controls extends JPanel {
+		private final String[] startStopButtonText = {"Start", "Pause", "Resume"};
+
 		private JButton startStop, step, reset;
+		private JTextField tickRate;
 
 		public Controls() {
-			this.startStop = new JButton();
+			this.startStop = new JButton("Start");
 			this.startStop.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {SimUI.this.startStop();}
@@ -127,15 +130,22 @@ public class SimUI extends JFrame {
 			});
 			this.add(this.reset);
 
-			this.updateButtons();
+			this.add(new JLabel("Tick rate (Hz):"));
+			this.tickRate = new JTextField("2", 3);
+			this.add(this.tickRate);
+
+			this.updateElements();
 		}
 
-		public void updateButtons() {
+		public void updateElements() {
 			this.startStop.setEnabled(true);
-			this.startStop.setText((SimUI.this.simState == 1) ? "Pause" : "Start");
+			this.startStop.setText(this.startStopButtonText[SimUI.this.simState]);
 			this.step.setEnabled(SimUI.this.simState != 1);
 			this.reset.setEnabled(SimUI.this.simState != 0);
+			this.tickRate.setEnabled(SimUI.this.simState != 1);
 		}
+
+		public double getTickRate() throws NumberFormatException {return Double.parseDouble(this.tickRate.getText());}
 	}
 
 	private class PopulationDisplay extends JPanel {
@@ -175,7 +185,7 @@ public class SimUI extends JFrame {
 
 	private void setSimState(int state) {
 		this.simState = state;
-		this.controls.updateButtons();
+		this.controls.updateElements();
 	}
 
 	private void tick() {
@@ -185,9 +195,19 @@ public class SimUI extends JFrame {
 	}
 
 	private void startStop() {
-		this.setSimState((this.simState == 1) ? 2 : 1);
-		if (this.simState == 1) {
-			this.timer = new Timer(500, new ActionListener() {
+		if (this.simState != 1) {
+			// start
+			double tickRate;
+			try {
+				tickRate = this.controls.getTickRate();
+				if (tickRate <= 0) {throw new DomainException();}
+			} catch (NumberFormatException | DomainException ex) {
+				JOptionPane.showMessageDialog(this, "Tick rate must be a positive integer");
+				return;
+			}
+			// validation ok
+			this.setSimState(1);
+			this.timer = new Timer((int) ((1. / tickRate) * 1000.), new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					System.out.println("timer at " + System.currentTimeMillis());
@@ -196,13 +216,16 @@ public class SimUI extends JFrame {
 			});
 			this.timer.start();
 		} else {
+			// pause
+			this.setSimState(2);
 			this.timer.stop();
 			this.timer = null;
 		}
 	}
 
 	private void promptReset() {
-		if (JOptionPane.showConfirmDialog(this, "All data and indivs will be discarded!", "You sure?", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+		int option = JOptionPane.showConfirmDialog(this, "All data and indivs will be discarded!", "You sure?", JOptionPane.OK_CANCEL_OPTION);
+		if (option == JOptionPane.OK_OPTION) {
 			createSim();
 		};
 	}
