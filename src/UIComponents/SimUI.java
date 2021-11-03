@@ -249,8 +249,8 @@ public class SimUI extends JFrame {
 	 * reset buttons, and fields for customizing running
 	 */
 	private class Controls extends JPanel {
-		private static final String[] START_STOP_BUTTON_TEXT = { "Start", "Pause", "Resume" };
-		private static final String[] RUN_MODES = { "Run forever", "Number of gens:", "Max fitness:" };
+		private final String[] startStopButtonText = { "Start", "Pause", "Resume" };
+		private final String[] runModes = { "Run forever", "Number of gens:", "Max fitness:" };
 
 		private JButton startStop, step, reset;
 		private JComboBox runMode;
@@ -285,7 +285,7 @@ public class SimUI extends JFrame {
 			});
 			this.add(this.reset);
 
-			this.runMode = new JComboBox<String>(Controls.RUN_MODES);
+			this.runMode = new JComboBox<String>(this.runModes);
 			this.runMode.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -309,7 +309,7 @@ public class SimUI extends JFrame {
 		 */
 		public void updateElements() {
 			this.startStop.setEnabled(true);
-			this.startStop.setText(Controls.START_STOP_BUTTON_TEXT[SimUI.this.simState]);
+			this.startStop.setText(this.startStopButtonText[SimUI.this.simState]);
 			this.step.setEnabled(SimUI.this.simState != 1);
 			this.reset.setEnabled(true);
 			this.runMode.setEnabled(SimUI.this.simState != 1);
