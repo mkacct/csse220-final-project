@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -32,6 +33,7 @@ public class SimUI extends JFrame {
 	private final Controls controls;
 	private final PopulationDisplay populationDisplay;
 	private Timer timer;
+	private int loops;
 
 	// 0 = not started, 1 = running, 2 = paused
 	private int simState;
@@ -42,11 +44,11 @@ public class SimUI extends JFrame {
 		public Header() {
 			this.add(new JLabel(
 				"Population size: " + SimUI.this.popSize
-				+ " \u2013 Chromosome size: " + SimUI.this.chromosomeSize
-				+ " \u2013 Fitness function: " + SimUI.this.ffName
-				+ " \u2013 Selection: " + SimUI.this.selectionMode
-				+ " \u2013 Crossover: " + SimUI.this.crossoverMode
-				+ " \u2013 Mutation rate: " + SimUI.this.mutationRate
+				+ " \u2013\u2013 Chromosome size: " + SimUI.this.chromosomeSize
+				+ " \u2013\u2013 Fitness function: " + SimUI.this.ffName
+				+ " \u2013\u2013 Selection: " + SimUI.this.selectionMode
+				+ " \u2013\u2013 Crossover: " + SimUI.this.crossoverMode
+				+ " \u2013\u2013 Mutation rate: " + SimUI.this.mutationRate
 			));
 		}
 	}
@@ -102,10 +104,12 @@ public class SimUI extends JFrame {
 	}
 
 	private class Controls extends JPanel {
-		private final String[] startStopButtonText = {"Start", "Pause", "Resume"};
+		private static final String[] START_STOP_BUTTON_TEXT = {"Start", "Pause", "Resume"};
+		private static final String[] RUN_MODES = {"Run forever", "Number of gens:", "Max fitness:"};
 
 		private JButton startStop, step, reset;
-		private JTextField tickRate;
+		private JComboBox runMode;
+		private JTextField tickRate, endCondition;
 
 		public Controls() {
 			this.startStop = new JButton("Start");
@@ -130,6 +134,16 @@ public class SimUI extends JFrame {
 			});
 			this.add(this.reset);
 
+			this.runMode = new JComboBox<String>(Controls.RUN_MODES);
+			this.runMode.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {Controls.this.updateElements();}
+
+			});
+			this.add(runMode);
+			this.endCondition = new JTextField("100", 3);
+			this.add(endCondition);
+
 			this.add(new JLabel("Tick rate (Hz):"));
 			this.tickRate = new JTextField("2", 3);
 			this.add(this.tickRate);
@@ -139,13 +153,17 @@ public class SimUI extends JFrame {
 
 		public void updateElements() {
 			this.startStop.setEnabled(true);
-			this.startStop.setText(this.startStopButtonText[SimUI.this.simState]);
+			this.startStop.setText(Controls.START_STOP_BUTTON_TEXT[SimUI.this.simState]);
 			this.step.setEnabled(SimUI.this.simState != 1);
-			this.reset.setEnabled(SimUI.this.simState != 0);
+			this.reset.setEnabled(true);
+			this.runMode.setEnabled(SimUI.this.simState != 1);
+			this.endCondition.setEnabled((SimUI.this.simState != 1) && (this.runMode.getSelectedIndex() != 0));
 			this.tickRate.setEnabled(SimUI.this.simState != 1);
 		}
 
 		public double getTickRate() throws NumberFormatException {return Double.parseDouble(this.tickRate.getText());}
+		public int getRunMode() {return this.runMode.getSelectedIndex();}
+		public int getEndConditionValue() throws NumberFormatException {return Integer.parseInt(this.endCondition.getText());}
 	}
 
 	private class PopulationDisplay extends JPanel {
@@ -180,6 +198,7 @@ public class SimUI extends JFrame {
 			this.fitnessFunction,
 			this.selectionMode
 		);
+		this.loops = 0;
 		this.setSimState(0);
 	}
 
@@ -191,7 +210,33 @@ public class SimUI extends JFrame {
 	private void tick() {
 		if (this.simState == 0) {this.setSimState(2);}
 		this.sim.nextGen();
+		this.updateDisplay();
+	}
+
+	private void updateDisplay() {
 		this.populationDisplay.updatePopulation(sim.getChromosomes());
+		this.revalidate();
+	}
+
+	private class TimerListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			switch (SimUI.this.controls.getRunMode()) {
+				case 1: // num gens
+					if (SimUI.this.loops >= SimUI.this.controls.getEndConditionValue()) {
+						SimUI.this.startStop();
+						return;
+					}
+					break;
+				case 2: // max fitness
+					if (SimUI.this.sim.getMaxFitness() >= SimUI.this.controls.getEndConditionValue()) {
+						SimUI.this.startStop();
+						return;
+					}
+			}
+			SimUI.this.tick();
+			SimUI.this.loops++;
+		}
 	}
 
 	private void startStop() {
@@ -205,28 +250,34 @@ public class SimUI extends JFrame {
 				JOptionPane.showMessageDialog(this, "Tick rate must be a positive integer");
 				return;
 			}
+			if (SimUI.this.controls.getRunMode() != 0) {
+				try {
+					double endConditionValue = this.controls.getEndConditionValue();
+					if (endConditionValue <= 0) {throw new DomainException();}
+				} catch (NumberFormatException ex) {
+					JOptionPane.showMessageDialog(this, "End condition value must be a positive integer");
+					return;
+				}
+			}
 			// validation ok
 			this.setSimState(1);
-			this.timer = new Timer((int) ((1. / tickRate) * 1000.), new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					System.out.println("timer at " + System.currentTimeMillis());
-					SimUI.this.tick();
-				}
-			});
+			this.timer = new Timer((int) ((1. / tickRate) * 1000.), new TimerListener());
+			this.loops = 0;
 			this.timer.start();
 		} else {
 			// pause
 			this.setSimState(2);
 			this.timer.stop();
 			this.timer = null;
+			this.loops = 0;
 		}
 	}
 
 	private void promptReset() {
 		int option = JOptionPane.showConfirmDialog(this, "All data and indivs will be discarded!", "You sure?", JOptionPane.OK_CANCEL_OPTION);
 		if (option == JOptionPane.OK_OPTION) {
-			createSim();
+			this.createSim();
+			this.updateDisplay();
 		};
 	}
 	

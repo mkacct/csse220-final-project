@@ -20,7 +20,7 @@ import SimComponents.Individual;
  */
 public class ChromosomeEditor extends JPanel {
 	public static final Color ZERO_COLOR = new Color(79, 132, 189);
-	public static final Color ONE_COLOR = new Color(189, 79, 185);
+	public static final Color ONE_COLOR = new Color(229, 119, 225);
 	public static final Color Q_COLOR = new Color(65, 63, 176);
 
 	Individual indiv;
