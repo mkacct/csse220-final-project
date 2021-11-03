@@ -206,7 +206,7 @@ public class Sim {
 	 * @return
 	 */
 	public int getMinFitness() {
-		int min = 0;
+		int min = 100;
 		for (Individual indiv : pop) {
 			if (fitnessCalc.calcFitness(indiv) < min) {
 				min = fitnessCalc.calcFitness(indiv);
