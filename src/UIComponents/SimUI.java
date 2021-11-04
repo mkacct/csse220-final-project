@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -22,7 +21,6 @@ import javax.swing.Timer;
 import Exceptions.DomainException;
 import Main.App;
 import SimComponents.FitnessFunction;
-import SimComponents.Graph;
 import SimComponents.Sim;
 
 /**
@@ -30,7 +28,7 @@ import SimComponents.Sim;
  * 
  * @author R_002
  */
-public class SimUI extends JFrame {
+public class SimUI extends AppWindow {
 	private final int popSize, chromosomeSize;
 	private final String ffName, selectionMode, crossoverMode;
 	private final double mutationRate;
@@ -40,7 +38,8 @@ public class SimUI extends JFrame {
 	private final Controls controls;
 	private final PopulationDisplay populationDisplay;
 	private Timer timer;
-	private int loops;
+	private int genCount;
+	private int tempGenCount;
 
 	// 0 = not started, 1 = running, 2 = paused
 	private int simState;
@@ -121,11 +120,11 @@ public class SimUI extends JFrame {
 	 * reset buttons, and fields for customizing running
 	 */
 	private class Controls extends JPanel {
-		private final String[] startStopButtonText = { "Start", "Pause", "Resume" };
-		private final String[] runModes = { "Run forever", "Number of gens:", "Max fitness:" };
+		private final String[] startStopButtonText = {"Start", "Pause", "Resume"};
+		private final String[] runModes = {"Run forever", "Number of gens:", "Max gen:", "Max fitness:"};
 
 		private JButton startStop, step, reset;
-		private JComboBox runMode;
+		private JComboBox<String> runMode;
 		private JTextField tickRate, endCondition;
 
 		public Controls() {
@@ -248,7 +247,8 @@ public class SimUI extends JFrame {
 		}
 		this.sim = new Sim(this.popSize, this.chromosomeSize, this.mutationRate, this.fitnessFunction,
 				this.selectionMode);
-		this.loops = 0;
+		this.genCount = 0;
+		this.tempGenCount = 0;
 		this.setSimState(0);
 	}
 
@@ -270,6 +270,7 @@ public class SimUI extends JFrame {
 			this.setSimState(2);
 		}
 		this.sim.nextGen();
+		SimUI.this.genCount++;
 		this.updateDisplay();
 	}
 
@@ -291,20 +292,26 @@ public class SimUI extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			switch (SimUI.this.controls.getRunMode()) {
-			case 1: // num gens
-				if (SimUI.this.loops >= SimUI.this.controls.getEndConditionValue()) {
-					SimUI.this.startStop();
-					return;
-				}
-				break;
-			case 2: // max fitness
-				if (SimUI.this.sim.getMaxFitness() >= SimUI.this.controls.getEndConditionValue()) {
-					SimUI.this.startStop();
-					return;
-				}
+				case 1: // num gens
+					if (SimUI.this.tempGenCount >= SimUI.this.controls.getEndConditionValue()) {
+						SimUI.this.startStop();
+						return;
+					}
+					break;
+				case 2: // max gen
+					if (SimUI.this.genCount >= SimUI.this.controls.getEndConditionValue()) {
+						SimUI.this.startStop();
+						return;
+					}
+					break;
+				case 3: // max fitness
+					if (SimUI.this.sim.getMaxFitness() >= SimUI.this.controls.getEndConditionValue()) {
+						SimUI.this.startStop();
+						return;
+					}
 			}
 			SimUI.this.tick();
-			SimUI.this.loops++;
+			SimUI.this.tempGenCount++;
 		}
 	}
 
@@ -338,14 +345,13 @@ public class SimUI extends JFrame {
 			// validation ok
 			this.setSimState(1);
 			this.timer = new Timer((int) ((1. / tickRate) * 1000.), new TimerListener());
-			this.loops = 0;
+			this.tempGenCount = 0;
 			this.timer.start();
 		} else {
 			// pause
 			this.setSimState(2);
 			this.timer.stop();
 			this.timer = null;
-			this.loops = 0;
 		}
 	}
 
@@ -376,9 +382,9 @@ public class SimUI extends JFrame {
 	 * @param crossoverMode
 	 * @param mutationRate
 	 */
-	public SimUI(int popSize, int chromosomeSize, String ffName, String selectionMode, String crossoverMode,
+	public SimUI(AppWindow parent, int popSize, int chromosomeSize, String ffName, String selectionMode, String crossoverMode,
 			double mutationRate) {
-		super();
+		super(parent);
 
 		this.popSize = popSize;
 		this.chromosomeSize = chromosomeSize;
@@ -401,8 +407,7 @@ public class SimUI extends JFrame {
 		double[] data = { this.sim.getMinFitness(), this.sim.getAvgFitness(), this.sim.getMaxFitness() };
 		this.graph = new Graph(data);
 		this.add(this.graph, BorderLayout.CENTER);
-		this.pack();
-		this.setResizable(false);
-		this.setVisible(true);
+		
+		this.showWindow();
 	}
 }

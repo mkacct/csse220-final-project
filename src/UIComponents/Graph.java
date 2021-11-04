@@ -1,4 +1,4 @@
-package SimComponents;
+package UIComponents;
 
 import java.awt.Color;
 import java.awt.Dimension;

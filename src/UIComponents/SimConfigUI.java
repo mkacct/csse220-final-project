@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -22,7 +21,7 @@ import SimComponents.Sim;
  * Window for setting up a new sim
  * @author R_002
  */
-public class SimConfigUI extends JFrame {
+public class SimConfigUI extends AppWindow {
 	private SimConfigUI.ConfigForm form;
 	
 	/**
@@ -93,15 +92,13 @@ public class SimConfigUI extends JFrame {
 		}
 	}
 	
-	public SimConfigUI() {
-		super();
+	public SimConfigUI(AppWindow parent) {
+		super(parent);
 		this.setTitle("Create New Sim");
 		this.form = new ConfigForm();
 		this.add(this.form, BorderLayout.NORTH);
 		this.add(new SimConfigUI.SimConfigConfirmation(), BorderLayout.SOUTH);
-		this.pack();
-		this.setResizable(false);
-		this.setVisible(true);
+		this.showWindow();
 	}
 
 	/**
@@ -139,6 +136,7 @@ public class SimConfigUI extends JFrame {
 		}
 		// form input is valid
 		new SimUI(
+			this.getParentWindow(),
 			this.form.getPopSize(),
 			this.form.getChromosomeSize(),
 			this.form.getFitnessFunction(),

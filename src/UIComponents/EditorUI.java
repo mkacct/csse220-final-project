@@ -8,7 +8,6 @@ import java.io.FileNotFoundException;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -26,7 +25,7 @@ import SimComponents.Individual;
  * 
  * @author R_002
  */
-public class EditorUI extends JFrame {
+public class EditorUI extends AppWindow {
 	private Individual indiv;
 	private File saveFile;
 	private ChromosomeEditor editor;
@@ -76,8 +75,8 @@ public class EditorUI extends JFrame {
 	 * 
 	 * @param size
 	 */
-	public EditorUI(int size) {
-		this(new Individual(size));
+	public EditorUI(AppWindow parent, int size) {
+		this(parent, new Individual(size));
 	}
 
 	/**
@@ -85,8 +84,8 @@ public class EditorUI extends JFrame {
 	 * 
 	 * @param indiv to edit
 	 */
-	public EditorUI(Individual indiv) {
-		super();
+	public EditorUI(AppWindow parent, Individual indiv) {
+		super(parent);
 		this.indiv = indiv;
 		this.saveFile = null;
 		this.setup();
@@ -97,8 +96,8 @@ public class EditorUI extends JFrame {
 	 * If file is invalid, show an error dialog and close the window
 	 * @param saveFile to load
 	 */
-	public EditorUI(File saveFile) {
-		super();
+	public EditorUI (AppWindow parent, File saveFile) {
+		super(parent);
 		Individual indiv = null;
 		try {
 			indiv = FileUtil.loadIndiv(saveFile);
@@ -124,9 +123,7 @@ public class EditorUI extends JFrame {
 		this.updateWindowTitle();
 		this.add(this.editor, BorderLayout.CENTER);
 		this.add(new EditorUI.EditorOptions(), BorderLayout.SOUTH);
-		this.pack();
-		this.setResizable(false);
-		this.setVisible(true);
+		this.showWindow();
 	}
 
 	/**

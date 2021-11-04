@@ -20,7 +20,7 @@ import Main.App;
  * Main window of the application, with title text and main menu buttons
  * @author R_002
  */
-public class MainUI extends JFrame {
+public class MainUI extends AppWindow {
 	/**
 	 * Titles and such
 	 */
@@ -69,21 +69,19 @@ public class MainUI extends JFrame {
 	}
 
 	public MainUI() {
-		super();
+		super(null);
 		this.setTitle(App.TITLE);
 		this.add(new MainUI.Header(), BorderLayout.NORTH);
 		this.add(new MainUI.MainMenu(), BorderLayout.SOUTH);
-		this.pack();
-		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setVisible(true);
+		this.showWindow();
 	}
 
 	/**
 	 * Open a sim config window, asking the user for info to make a new sim
 	 */
 	private void newSim() {
-		new SimConfigUI();
+		new SimConfigUI(this);
 	}
 
 	/**
@@ -100,7 +98,7 @@ public class MainUI extends JFrame {
 			return;
 		}
 		if (size > 0) {
-			new EditorUI(size);
+			new EditorUI(this, size);
 		} else {
 			JOptionPane.showMessageDialog(MainUI.this, "Size must be at least 1");
 		}
@@ -114,6 +112,6 @@ public class MainUI extends JFrame {
 		int returnVal = picker.showOpenDialog(MainUI.this);
 		if (returnVal != JFileChooser.APPROVE_OPTION) {return;}
 		File file = picker.getSelectedFile();
-		new EditorUI(file);
+		new EditorUI(this, file);
 	}
 }
