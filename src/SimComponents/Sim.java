@@ -127,6 +127,7 @@ public class Sim {
 	 */
 	public void nextGen() {
 		ArrayList<Individual> parents = new ArrayList<Individual>();
+
 		switch (selectionType) {
 		case "Truncation":
 			parents = this.truncationSelection();
@@ -138,7 +139,13 @@ public class Sim {
 			parents = this.rankedSelection();
 			break;
 		}
+		boolean odd = pop.size()%2==1;
 		pop = new ArrayList<Individual>();
+		if(odd) {
+			Individual parent1 = this.getWorstIndividual(parents);
+			System.out.println(parents.remove(parent1));
+			pop.add(parent1.create(mutationRate));
+		}
 		for (Individual indiv : parents) {
 			Individual child1 = indiv.create(mutationRate);
 			Individual child2 = indiv.create(mutationRate);
@@ -148,29 +155,6 @@ public class Sim {
 		double[] fitness = { this.getMinFitness(), this.getAvgFitness(), this.getMaxFitness() };
 		fitnessTracker.add(fitness);
 	}
-
-//	Fairly sure these are unneeded here; should remove eventually but leaving for now as reference
-	/**
-	 * // * Cycles through the next n generations // * // * @param n //
-	 */
-//	public void nextGens(int n) {
-//		for (int i = 0; i < n; i++) {
-//			this.nextGen();
-//		}
-//	}
-//
-//	/**
-//	 * Cycles through the generations until the max fitness reaches the fitness
-//	 * entered.
-//	 * 
-//	 * @param fitness <br>
-//	 *                Constraints: 0 <= fitness <= 100
-//	 */
-//	public void nextGensUntil(int fitness) {
-//		while (this.getMaxFitness() < fitness) {
-//			this.nextGen();
-//		}
-//	}
 
 	/**
 	 * Returns the fitness of the most fit chromosome
@@ -231,6 +215,24 @@ public class Sim {
 			}
 		}
 		return bestChromosome;
+	}
+	
+	/**
+	 * Returns the  individual with the worst fitness. If multiple
+	 * have the same fitness, returns the first of them
+	 * 
+	 * @return
+	 */
+	private Individual getWorstIndividual(ArrayList<Individual> input) {
+		Individual worstIndiv = input.get(0);
+		int min = fitnessCalc.calcFitness(input.get(0));
+		for (Individual indiv : input) {
+			if (fitnessCalc.calcFitness(indiv) <min) {
+				min = fitnessCalc.calcFitness(indiv);
+				worstIndiv = indiv;
+			}
+		}
+		return worstIndiv;
 	}
 
 	/**
