@@ -143,7 +143,7 @@ public class Sim {
 		pop = new ArrayList<Individual>();
 		if(odd) {
 			Individual parent1 = this.getWorstIndividual(parents);
-			System.out.println(parents.remove(parent1));
+			parents.remove(parent1);
 			pop.add(parent1.create(mutationRate));
 		}
 		for (Individual indiv : parents) {
