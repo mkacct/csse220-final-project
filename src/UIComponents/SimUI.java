@@ -31,7 +31,7 @@ import SimComponents.Sim;
 public class SimUI extends AppWindow {
 	private final int popSize, chromosomeSize;
 	private final String ffName, selectionMode, crossoverMode;
-	private final double mutationRate;
+	private final double mutationRate, elitism;
 	private final FitnessFunction fitnessFunction;
 
 	private final Graph graph;
@@ -54,7 +54,7 @@ public class SimUI extends AppWindow {
 			this.add(new JLabel("Population size: " + SimUI.this.popSize + " \u2013\u2013 Chromosome size: "
 					+ SimUI.this.chromosomeSize + " \u2013\u2013 Fitness function: " + SimUI.this.ffName
 					+ " \u2013\u2013 Selection: " + SimUI.this.selectionMode + " \u2013\u2013 Crossover: "
-					+ SimUI.this.crossoverMode + " \u2013\u2013 Mutation rate: " + SimUI.this.mutationRate));
+					+ SimUI.this.crossoverMode + " \u2013\u2013 Mutation rate: " + SimUI.this.mutationRate + " \u2013\u2013 Elitism: " + SimUI.this.elitism));
 		}
 	}
 
@@ -381,9 +381,10 @@ public class SimUI extends AppWindow {
 	 * @param selectionMode
 	 * @param crossoverMode
 	 * @param mutationRate
+	 * @param elitism
 	 */
 	public SimUI(AppWindow parent, int popSize, int chromosomeSize, String ffName, String selectionMode, String crossoverMode,
-			double mutationRate) {
+			double mutationRate, double elitism) {
 		super(parent);
 
 		this.popSize = popSize;
@@ -393,6 +394,7 @@ public class SimUI extends AppWindow {
 		this.selectionMode = selectionMode;
 		this.crossoverMode = crossoverMode;
 		this.mutationRate = mutationRate;
+		this.elitism = elitism;
 
 		this.setTitle("Sim");
 		this.add(new SimUI.Header(), BorderLayout.NORTH);

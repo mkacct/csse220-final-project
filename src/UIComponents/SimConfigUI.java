@@ -30,7 +30,7 @@ public class SimConfigUI extends AppWindow {
 	private class ConfigForm extends JPanel {
 		private JTextField chromosomeSize, popSize;
 		private JComboBox<String> fitnessFunction, selector, crossover;
-		private JTextField mutationRate;
+		private JTextField mutationRate, elitism;
 
 		public ConfigForm() {
 			super();
@@ -59,6 +59,10 @@ public class SimConfigUI extends AppWindow {
 			this.mutationRate = new JTextField("0.01", 5);
 			this.add(this.mutationRate);
 
+			this.add(new JLabel("Elitism"));
+			this.elitism = new JTextField("0", 5);
+			this.add(this.elitism);
+
 			this.setLayout(new GridLayout(this.getComponentCount() / 2, 2));
 		}
 
@@ -69,6 +73,7 @@ public class SimConfigUI extends AppWindow {
 		public String getSelectionMode() {return (String) selector.getSelectedItem();}
 		public String getCrossoverMode() {return (String) crossover.getSelectedItem();}
 		public double getMutationRate() throws NumberFormatException, DomainException {return MiscUtil.parseProportion(mutationRate.getText());}
+		public double getElitism() throws NumberFormatException, DomainException {return MiscUtil.parseProportion(elitism.getText());}
 	}
 
 	/**
@@ -120,6 +125,13 @@ public class SimConfigUI extends AppWindow {
 		} catch (DomainException ex) {
 			throw new FormValidationException("Mutation rate must be between 0 and 1");
 		}
+		try {
+			this.form.getElitism();
+		} catch (NumberFormatException ex) {
+			throw new FormValidationException("Elitism format is invalid");
+		} catch (DomainException ex) {
+			throw new FormValidationException("Elitism must be between 0 and 1");
+		}
 	}
 
 	/**
@@ -142,7 +154,8 @@ public class SimConfigUI extends AppWindow {
 			this.form.getFitnessFunction(),
 			this.form.getSelectionMode(),
 			this.form.getCrossoverMode(),
-			this.form.getMutationRate()
+			this.form.getMutationRate(),
+			this.form.getElitism()
 		);
 		this.dispose();
 	}
