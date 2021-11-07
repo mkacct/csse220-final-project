@@ -318,7 +318,7 @@ public class Sim {
 		 * prevents i from incrementing to ensure the right number of individuals end up
 		 * in the parents list.
 		 */
-		for (int i = 0, size = pop.size() / 2; i < size; i++) {
+		for (int i = 0, size = (int)(pop.size() / 2.0+0.5); i < size; i++) {
 			if (!parents.contains(rouletteWheel.get((int) (Math.random() * num)))) {
 				parents.add(rouletteWheel.get((int) (Math.random() * num)));
 			} else {
