@@ -159,15 +159,35 @@ public class Sim {
 			pop.add(parent1.create(mutationRate));
 		}
 		
+		switch(this.crossoverMode) {
+			case "None":
+				break;
+			case "One point":
+				parents = this.crossoverOnePoint(parents);
+				break;
+			default:
+				break;
+		}
+		
 		for (Individual indiv : parents) {
 			Individual child1 = indiv.create(mutationRate);
 			Individual child2 = indiv.create(mutationRate);
 			pop.add(child1);
 			pop.add(child2);
 		}
+		
 		double[] fitness = { this.getMinFitness(), this.getAvgFitness(), this.getMaxFitness() };
 		fitnessTracker.add(fitness);
 	}
+
+	private ArrayList<Individual> crossoverOnePoint(ArrayList<Individual> parents) {
+		ArrayList<Individual> newParents = new ArrayList<Individual>();
+		for(int i = 0; i < parents.size()/2; i++) {
+			newParents.addAll(parents.get(i*2).onePointCrossoverWith(parents.get(i*2+1)));
+		}
+		return newParents;
+	}
+
 
 	/**
 	 * Returns the fitness of the most fit chromosome
