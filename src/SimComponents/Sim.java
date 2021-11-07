@@ -133,7 +133,6 @@ public class Sim {
 		ArrayList<Individual> copyOver = new ArrayList<Individual>();
 		int numToCopy = (int)(this.elitism*pop.size());
 		while(numToCopy > 0) {
-			System.out.println(numToCopy);
 			copyOver.add(this.getBestIndividual());
 			pop.remove(this.getBestIndividual());
 			numToCopy--;
