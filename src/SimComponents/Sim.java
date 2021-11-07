@@ -22,7 +22,7 @@ public class Sim {
 	private Comparator<Individual> compare;
 	private double mutationRate;
 	String selectionType;
-	boolean crossover;
+	String crossoverMode;
 	double elitism;
 
 	/**
@@ -106,7 +106,7 @@ public class Sim {
 	 * @param fitnessCalc
 	 * @param selectionType
 	 */
-	public Sim(int popSize, int indivSize, double rate, FitnessFunction fitnessCalc, String selectionType) {
+	public Sim(int popSize, int indivSize, double rate, FitnessFunction fitnessCalc, String selectionType, double elitism, String crossoverMode) {
 		this.pop = new ArrayList<Individual>();
 		this.fitnessCalc = fitnessCalc;
 		for (int i = 0; i < popSize; i++) {
@@ -118,6 +118,8 @@ public class Sim {
 		fitnessTracker = new ArrayList<double[]>();
 		double[] fitness = { this.getMinFitness(), this.getAvgFitness(), this.getMaxFitness() };
 		fitnessTracker.add(fitness);
+		this.elitism = elitism;
+		this.crossoverMode = crossoverMode;
 	}
 
 	/**
