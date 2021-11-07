@@ -21,6 +21,7 @@ import javax.swing.Timer;
 import Exceptions.DomainException;
 import Main.App;
 import SimComponents.FitnessFunction;
+import SimComponents.Individual;
 import SimComponents.Sim;
 
 /**
@@ -37,6 +38,7 @@ public class SimUI extends AppWindow {
 	private final Graph graph;
 	private final Controls controls;
 	private final PopulationDisplay populationDisplay;
+	private final OneIndivDisplay fittestDisplay;
 	private Timer timer;
 	private int genCount;
 	private int tempGenCount;
@@ -235,6 +237,31 @@ public class SimUI extends AppWindow {
 	}
 
 	/**
+	 * A display of one indiv and it's fitness value
+	 * For use in the "Visualize the fittest" feature
+	 */
+	private class OneIndivDisplay extends JPanel {
+		/**
+		 * Construct one such display
+		 * @param indiv to show
+		 */
+		public OneIndivDisplay(Individual indiv) {
+			this.setLayout(new GridLayout(2, 1));
+			this.showIndiv(indiv);
+		}
+
+		/**
+		 * Set the indiv being displayed
+		 * @param indiv to show
+		 */
+		public void showIndiv(Individual indiv) {
+			this.removeAll();
+			this.add(new ChromosomeDisplay(indiv.getChromosome()));
+			this.add(new JLabel("Fitness: " + fitnessFunction.calcFitness(indiv)));
+		}
+	}
+
+	/**
 	 * Creates a new SimUI
 	 * 
 	 * @param popSize        <br>
@@ -270,7 +297,9 @@ public class SimUI extends AppWindow {
 		createSim();
 
 		this.populationDisplay = new PopulationDisplay(this.sim.getChromosomes());
-		this.add(this.populationDisplay, BorderLayout.EAST);
+		this.add(this.populationDisplay, BorderLayout.WEST);
+		this.fittestDisplay = new OneIndivDisplay(this.sim.getBestIndividual());
+		this.add(this.fittestDisplay, BorderLayout.EAST);
 		double[] data = { this.sim.getMinFitness(), this.sim.getAvgFitness(), this.sim.getMaxFitness() };
 		this.graph = new Graph(data);
 		this.add(this.graph, BorderLayout.CENTER);
@@ -319,7 +348,8 @@ public class SimUI extends AppWindow {
 	 * Updates the display
 	 */
 	private void updateDisplay() {
-		this.populationDisplay.updatePopulation(sim.getChromosomes());
+		this.populationDisplay.updatePopulation(this.sim.getChromosomes());
+		this.fittestDisplay.showIndiv(this.sim.getBestIndividual());
 		double[] data = { this.sim.getMinFitness(), this.sim.getAvgFitness(), this.sim.getMaxFitness() };
 		this.graph.updateGraph(data);
 		this.graph.repaint();
