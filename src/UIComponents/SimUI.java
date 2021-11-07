@@ -208,8 +208,6 @@ public class SimUI extends AppWindow {
 	 *
 	 */
 	private class PopulationDisplay extends JPanel {
-		ArrayList<char[]> chromosomes;
-
 		/**
 		 * Constructs a population display with the given array of chromosomes
 		 * 
@@ -229,7 +227,6 @@ public class SimUI extends AppWindow {
 		 * @param chromosomes
 		 */
 		void updatePopulation(ArrayList<char[]> chromosomes) {
-			this.chromosomes = chromosomes;
 			this.removeAll();
 			for (int i = 0; i < chromosomes.size(); i++) {
 				this.add(new ChromosomeDisplay(chromosomes.get(i)));
@@ -290,7 +287,7 @@ public class SimUI extends AppWindow {
 			this.timer = null;
 		}
 		this.sim = new Sim(this.popSize, this.chromosomeSize, this.mutationRate, this.fitnessFunction,
-				this.selectionMode);
+				this.selectionMode, this.elitism, this.crossoverMode);
 		this.genCount = 0;
 		this.tempGenCount = 0;
 		this.setSimState(0);
