@@ -115,6 +115,15 @@ public class SimUI extends AppWindow {
 			g.setColor(Color.black);
 			g.drawRect(0, 0, this.getWidth(), this.getHeight());
 		}
+
+		/**
+		 * Force the component to be square
+		 */
+		@Override
+		public void setBounds(int x, int y, int width, int height) {
+			int sideLength = Math.min(width, height);
+			super.setBounds(x, y, sideLength, sideLength);
+		}
 	}
 
 	/**
@@ -365,19 +374,19 @@ public class SimUI extends AppWindow {
 			switch (SimUI.this.controls.getRunMode()) {
 				case 1: // num gens
 					if (SimUI.this.tempGenCount >= SimUI.this.controls.getEndConditionValue()) {
-						SimUI.this.startStop();
+						SimUI.this.pause();
 						return;
 					}
 					break;
 				case 2: // max gen
 					if (SimUI.this.genCount >= SimUI.this.controls.getEndConditionValue()) {
-						SimUI.this.startStop();
+						SimUI.this.pause();
 						return;
 					}
 					break;
 				case 3: // max fitness
 					if (SimUI.this.sim.getMaxFitness() >= SimUI.this.controls.getEndConditionValue()) {
-						SimUI.this.startStop();
+						SimUI.this.pause();
 						return;
 					}
 			}
@@ -387,49 +396,64 @@ public class SimUI extends AppWindow {
 	}
 
 	/**
-	 * Starts or stops the sim If starting, does validation of the user input first
+	 * Toggles whether the sim is running
 	 */
 	private void startStop() {
 		if (this.simState != 1) {
-			// start
-			double tickRate;
+			start();
+		} else {
+			pause();
+		}
+	}
+
+	/**
+	 * Does validation to see if the sim can start, and if so starts it
+	 */
+	private void start() {
+		if (this.simState == 1) {return;}
+		double tickRate;
+		try {
+			tickRate = this.controls.getTickRate();
+			if (tickRate <= 0) {
+				throw new DomainException();
+			}
+		} catch (NumberFormatException | DomainException ex) {
+			JOptionPane.showMessageDialog(this, "Tick rate must be a positive integer");
+			return;
+		}
+		if (SimUI.this.controls.getRunMode() != 0) {
 			try {
-				tickRate = this.controls.getTickRate();
-				if (tickRate <= 0) {
+				double endConditionValue = this.controls.getEndConditionValue();
+				if (endConditionValue <= 0) {
 					throw new DomainException();
 				}
-			} catch (NumberFormatException | DomainException ex) {
-				JOptionPane.showMessageDialog(this, "Tick rate must be a positive integer");
+			} catch (NumberFormatException ex) {
+				JOptionPane.showMessageDialog(this, "End condition value must be a positive integer");
 				return;
 			}
-			if (SimUI.this.controls.getRunMode() != 0) {
-				try {
-					double endConditionValue = this.controls.getEndConditionValue();
-					if (endConditionValue <= 0) {
-						throw new DomainException();
-					}
-				} catch (NumberFormatException ex) {
-					JOptionPane.showMessageDialog(this, "End condition value must be a positive integer");
-					return;
-				}
-			}
-			// validation ok
-			this.setSimState(1);
-			this.timer = new Timer((int) ((1. / tickRate) * 1000.), new TimerListener());
-			this.tempGenCount = 0;
-			this.timer.start();
-		} else {
-			// pause
-			this.setSimState(2);
-			this.timer.stop();
-			this.timer = null;
 		}
+		// validation ok
+		this.setSimState(1);
+		this.timer = new Timer((int) ((1. / tickRate) * 1000.), new TimerListener());
+		this.tempGenCount = 0;
+		this.timer.start();
+	}
+
+	/**
+	 * Pauses the sim
+	 */
+	private void pause() {
+		if (this.simState != 1) {return;}
+		this.setSimState(2);
+		this.timer.stop();
+		this.timer = null;
 	}
 
 	/**
 	 * Asks if the user wants to reset, and if so does
 	 */
 	private void promptReset() {
+		this.pause();
 		int option = JOptionPane.showConfirmDialog(this, "All data will be discarded!", "You sure?",
 				JOptionPane.OK_CANCEL_OPTION);
 		if (option == JOptionPane.OK_OPTION) {
@@ -442,6 +466,7 @@ public class SimUI extends AppWindow {
 
 	@Override
 	protected boolean closeWindowCheck() {
+		this.pause();
 		int option = JOptionPane.showConfirmDialog(this, "The sim will not be saved!", "You sure?", JOptionPane.OK_CANCEL_OPTION);
 		return option == JOptionPane.OK_OPTION;
 	}
