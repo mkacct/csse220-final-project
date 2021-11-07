@@ -171,7 +171,7 @@ public class SimUI extends AppWindow {
 			this.add(endCondition);
 
 			this.add(new JLabel("Tick rate (Hz):"));
-			this.tickRate = new JTextField("2", 3);
+			this.tickRate = new JTextField("20", 3);
 			this.add(this.tickRate);
 
 			this.updateElements();
