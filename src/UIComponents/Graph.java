@@ -96,16 +96,19 @@ public class Graph extends JComponent {
 		graphHeight = this.getHeight() - 20;
 		originX = 20;
 		originY = graphHeight + 10;
-		g.drawRect(20, 10, graphWidth, graphHeight);
-		for (int i = 0; i <= 10; i++) {
-			g.drawString(Integer.toString(i * 10), 0, originY + 10 - (int) (i * graphHeight / 10));
-			g.drawLine(17, originY - (int) (i * graphHeight / 10), 23, originY - (int) (i * graphHeight / 10));
+		int tickSize = 3;
+		g.drawRect(originX, 10, graphWidth, graphHeight);
+		int numVerticalTicks = 10;
+		for (int i = 0; i <= numVerticalTicks; i++) {
+			g.drawString(Integer.toString(i * 10), 0, originY + 10 - (int) (i * graphHeight / numVerticalTicks));
+			g.drawLine(originX-tickSize, originY - (int) (i * graphHeight / numVerticalTicks), originX+tickSize, originY - (int) (i * graphHeight / numVerticalTicks));
 		}
-		for (int i = 1; i <= Math.max(dataPoints.size(), 10); i++) {
-			g.drawString(Integer.toString(i * 10),
-					10 + (int) (i * graphWidth / Math.max(dataPoints.size() / 10, 10)), this.getHeight());
-			g.drawLine(20 + (int) (i * graphWidth / Math.max(dataPoints.size() / 10, 10)), originY - 3,
-					20 + (int) (i * graphWidth / Math.max(dataPoints.size() / 10, 10)), originY + 3);
+		int tickWidth = Math.max(dataPoints.size()/10, 10)-Math.max(dataPoints.size()/10, 10)%10;
+		for (int i = 1; i*tickWidth <= Math.max(100,dataPoints.size()); i++) {
+			g.drawString(Integer.toString(i * tickWidth),
+					originX + i*tickWidth * graphWidth / (Math.max(dataPoints.size(), 100))-10, this.getHeight());
+			g.drawLine(originX + i*tickWidth * graphWidth / (Math.max(dataPoints.size(), 100)), originY - 3,
+					originX + i*tickWidth * graphWidth / (Math.max(dataPoints.size(), 100)), originY + 3);
 		}
 	}
 
