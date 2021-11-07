@@ -13,7 +13,7 @@ public class FitnessFunctionAll1s implements FitnessFunction {
 	}
 
 	/**
-	 * Returns the number of 1s in the chromosome
+	 * Returns the percentage of 1s in the chromosome
 	 */
 	@Override
 	public int calcFitness(Individual indiv) {
@@ -24,7 +24,7 @@ public class FitnessFunctionAll1s implements FitnessFunction {
 				fitness++;
 			}
 		}
-		return fitness;
+		return (int) (fitness*100/chromosome.length);
 	}
 
 }

@@ -12,9 +12,9 @@ import java.util.Random;
  *         evolution
  */
 public class Sim {
-	public static final String[] FF_NAMES = {"All 1s", "Match smiley face", "Either extreme"};
-	public static final String[] SELECTOR_NAMES = {"Truncation", "Roulette wheel", "Ranked"};
-	public static final String[] CROSSOVER_NAMES = {"None", "One point"};
+	public static final String[] FF_NAMES = { "All 1s", "Match smiley face" };
+	public static final String[] SELECTOR_NAMES = { "Truncation", "Roulette wheel", "Ranked" };
+	public static final String[] CROSSOVER_NAMES = { "None", "One point" };
 
 	private ArrayList<Individual> pop;
 	private ArrayList<double[]> fitnessTracker;
@@ -106,7 +106,8 @@ public class Sim {
 	 * @param fitnessCalc
 	 * @param selectionType
 	 */
-	public Sim(int popSize, int indivSize, double rate, FitnessFunction fitnessCalc, String selectionType, double elitism, String crossoverMode) {
+	public Sim(int popSize, int indivSize, double rate, FitnessFunction fitnessCalc, String selectionType,
+			double elitism, String crossoverMode) {
 		this.pop = new ArrayList<Individual>();
 		this.fitnessCalc = fitnessCalc;
 		for (int i = 0; i < popSize; i++) {
@@ -129,10 +130,10 @@ public class Sim {
 	 */
 	public void nextGen() {
 		ArrayList<Individual> parents = new ArrayList<Individual>();
-		
+
 		ArrayList<Individual> copyOver = new ArrayList<Individual>();
-		int numToCopy = (int)(this.elitism*pop.size());
-		while(numToCopy > 0) {
+		int numToCopy = (int) (this.elitism * pop.size());
+		while (numToCopy > 0) {
 			copyOver.add(this.getBestIndividual());
 			pop.remove(this.getBestIndividual());
 			numToCopy--;
@@ -149,44 +150,56 @@ public class Sim {
 			parents = this.rankedSelection();
 			break;
 		}
-		
-		boolean odd = pop.size()%2==1;
+
+		boolean odd = pop.size() % 2 == 1;
 		pop = copyOver;
-		if(odd) {
+		if (odd) {
 			Individual parent1 = this.getWorstIndividual(parents);
 			parents.remove(parent1);
 			pop.add(parent1.create(mutationRate));
 		}
-		
-		switch(this.crossoverMode) {
-			case "None":
-				break;
-			case "One point":
-				parents = this.crossoverOnePoint(parents);
-				break;
-			default:
-				break;
+
+		switch (this.crossoverMode) {
+		case "None":
+			break;
+		case "One point":
+			if(parents.size()%2==1) {
+				Individual parent1 = this.getWorstIndividual(parents);
+				parents.remove(parent1);
+				pop.add(parent1.create(mutationRate));
+				pop.add(parent1.create(mutationRate));
+			}
+			parents = this.crossoverOnePoint(parents);
+			break;
+		default:
+			break;
 		}
-		
+
 		for (Individual indiv : parents) {
 			Individual child1 = indiv.create(mutationRate);
 			Individual child2 = indiv.create(mutationRate);
 			pop.add(child1);
 			pop.add(child2);
 		}
-		
+
 		double[] fitness = { this.getMinFitness(), this.getAvgFitness(), this.getMaxFitness() };
 		fitnessTracker.add(fitness);
 	}
 
+	/**
+	 * Returns an arraylist of individuals that have been crossed together
+	 * 
+	 * @param parents <br>
+	 *                Requires: parents is of even length
+	 * @return
+	 */
 	private ArrayList<Individual> crossoverOnePoint(ArrayList<Individual> parents) {
 		ArrayList<Individual> newParents = new ArrayList<Individual>();
-		for(int i = 0; i < parents.size()/2; i++) {
-			newParents.addAll(parents.get(i*2).onePointCrossoverWith(parents.get(i*2+1)));
+		for (int i = 0; i < parents.size() / 2; i++) {
+			newParents.addAll(parents.get(i * 2).onePointCrossoverWith(parents.get(i * 2 + 1)));
 		}
 		return newParents;
 	}
-
 
 	/**
 	 * Returns the fitness of the most fit chromosome
@@ -248,10 +261,10 @@ public class Sim {
 		}
 		return bestIndividual;
 	}
-	
+
 	/**
-	 * Returns the  individual with the worst fitness. If multiple
-	 * have the same fitness, returns the first of them
+	 * Returns the individual with the worst fitness. If multiple have the same
+	 * fitness, returns the first of them
 	 * 
 	 * @return
 	 */
@@ -259,7 +272,7 @@ public class Sim {
 		Individual worstIndiv = input.get(0);
 		int min = fitnessCalc.calcFitness(input.get(0));
 		for (Individual indiv : input) {
-			if (fitnessCalc.calcFitness(indiv) <min) {
+			if (fitnessCalc.calcFitness(indiv) < min) {
 				min = fitnessCalc.calcFitness(indiv);
 				worstIndiv = indiv;
 			}
@@ -346,13 +359,11 @@ public class Sim {
 	 */
 	public static FitnessFunction ffByName(String name) {
 		switch (name) {
-			case "All 1s":
-				return new FitnessFunctionAll1s();
-			case "Match smiley face":
-				String smileyFace = "0000000000000000000000100001000000000000000000000000000000000000000000010000001001111111100000000000";
-				return new FitnessFunctionMatchTarget(smileyFace.toCharArray());
-			case "Either extreme":
-				return new FitnessFunctionEitherExtreme();
+		case "All 1s":
+			return new FitnessFunctionAll1s();
+		case "Match smiley face":
+			String smileyFace = "0000000000000000000000100001000000000000000000000000000000000000000000010000001001111111100000000000";
+			return new FitnessFunctionMatchTarget(smileyFace.toCharArray());
 		}
 		throw new IllegalArgumentException("Invalid fitness function name \"" + name + "\"");
 	}
