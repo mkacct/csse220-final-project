@@ -238,6 +238,50 @@ public class SimUI extends AppWindow {
 	}
 
 	/**
+	 * Creates a new SimUI
+	 * 
+	 * @param popSize        <br>
+	 *                       > 0
+	 * @param chromosomeSize <br>
+	 *                       > 0
+	 * @param ffName         <br>
+	 *                       String
+	 * @param selectionMode
+	 * @param crossoverMode
+	 * @param mutationRate
+	 * @param elitism
+	 */
+	public SimUI(AppWindow parent, int popSize, int chromosomeSize, String ffName, String selectionMode, String crossoverMode,
+			double mutationRate, double elitism) {
+		super(parent);
+
+		this.popSize = popSize;
+		this.chromosomeSize = chromosomeSize;
+		this.ffName = ffName;
+		this.fitnessFunction = Sim.ffByName(this.ffName);
+		this.selectionMode = selectionMode;
+		this.crossoverMode = crossoverMode;
+		this.mutationRate = mutationRate;
+		this.elitism = elitism;
+
+		this.setTitle("Sim");
+		this.add(new SimUI.Header(), BorderLayout.NORTH);
+
+		this.controls = new SimUI.Controls();
+		this.add(this.controls, BorderLayout.SOUTH);
+
+		createSim();
+
+		this.populationDisplay = new PopulationDisplay(this.sim.getChromosomes());
+		this.add(this.populationDisplay, BorderLayout.EAST);
+		double[] data = { this.sim.getMinFitness(), this.sim.getAvgFitness(), this.sim.getMaxFitness() };
+		this.graph = new Graph(data);
+		this.add(this.graph, BorderLayout.CENTER);
+		
+		this.showWindow();
+	}
+	
+	/**
 	 * Creates the sim object; also handles some other reset things
 	 */
 	private void createSim() {
@@ -359,7 +403,7 @@ public class SimUI extends AppWindow {
 	 * Asks if the user wants to reset, and if so does
 	 */
 	private void promptReset() {
-		int option = JOptionPane.showConfirmDialog(this, "All data and indivs will be discarded!", "You sure?",
+		int option = JOptionPane.showConfirmDialog(this, "All data will be discarded!", "You sure?",
 				JOptionPane.OK_CANCEL_OPTION);
 		if (option == JOptionPane.OK_OPTION) {
 			this.createSim();
@@ -369,47 +413,9 @@ public class SimUI extends AppWindow {
 		;
 	}
 
-	/**
-	 * Creates a new SimUI
-	 * 
-	 * @param popSize        <br>
-	 *                       > 0
-	 * @param chromosomeSize <br>
-	 *                       > 0
-	 * @param ffName         <br>
-	 *                       String
-	 * @param selectionMode
-	 * @param crossoverMode
-	 * @param mutationRate
-	 * @param elitism
-	 */
-	public SimUI(AppWindow parent, int popSize, int chromosomeSize, String ffName, String selectionMode, String crossoverMode,
-			double mutationRate, double elitism) {
-		super(parent);
-
-		this.popSize = popSize;
-		this.chromosomeSize = chromosomeSize;
-		this.ffName = ffName;
-		this.fitnessFunction = Sim.ffByName(this.ffName);
-		this.selectionMode = selectionMode;
-		this.crossoverMode = crossoverMode;
-		this.mutationRate = mutationRate;
-		this.elitism = elitism;
-
-		this.setTitle("Sim");
-		this.add(new SimUI.Header(), BorderLayout.NORTH);
-
-		this.controls = new SimUI.Controls();
-		this.add(this.controls, BorderLayout.SOUTH);
-
-		createSim();
-
-		this.populationDisplay = new PopulationDisplay(this.sim.getChromosomes());
-		this.add(this.populationDisplay, BorderLayout.EAST);
-		double[] data = { this.sim.getMinFitness(), this.sim.getAvgFitness(), this.sim.getMaxFitness() };
-		this.graph = new Graph(data);
-		this.add(this.graph, BorderLayout.CENTER);
-		
-		this.showWindow();
+	@Override
+	protected boolean closeWindowCheck() {
+		int option = JOptionPane.showConfirmDialog(this, "The sim will not be saved!", "You sure?", JOptionPane.OK_CANCEL_OPTION);
+		return option == JOptionPane.OK_OPTION;
 	}
 }
