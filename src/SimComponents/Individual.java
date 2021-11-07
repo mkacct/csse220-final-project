@@ -1,5 +1,6 @@
 package SimComponents;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import Main.MiscUtil;
@@ -178,6 +179,34 @@ public class Individual {
 			charSet1[i] = charSet[i];
 		}
 		return charSet1;
+	}
+
+	/**
+	 * Crosses this individual with another one and returns two new individuals with
+	 * part of each chromosome
+	 * 
+	 * @param indiv <br>
+	 *              Requires: This individual must have the same chromosome length
+	 *              and charset as the one with which it is crossed
+	 * @return
+	 */
+	public ArrayList<Individual> onePointCrossoverWith(Individual indiv) {
+		char[] chromosome2 = indiv.getChromosome();
+		char[] child1Chromosome = new char[chromosome.length];
+		char[] child2Chromosome = new char[chromosome.length];
+		int crossoverPoint = (int) (Math.random() * chromosome.length);
+		for (int i = 0; i < crossoverPoint; i++) {
+			child1Chromosome[i] = chromosome[i];
+			child2Chromosome[i] = chromosome2[i];
+		}
+		for (int i = crossoverPoint; i < chromosome.length; i++) {
+			child1Chromosome[i] = chromosome2[i];
+			child2Chromosome[i] = chromosome[i];
+		}
+		ArrayList<Individual> children = new ArrayList<Individual>();
+		children.add(new Individual(child1Chromosome, this.getCharSet()));
+		children.add(new Individual(child2Chromosome, this.getCharSet()));
+		return children;
 	}
 
 	/**
