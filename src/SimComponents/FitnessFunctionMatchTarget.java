@@ -29,7 +29,7 @@ public class FitnessFunctionMatchTarget implements FitnessFunction {
 				fitness++;
 			}
 		}
-		return (int) (fitness * 100 / target.length);
+		return (int) (fitness * 100.0 / target.length);
 	}
 
 }

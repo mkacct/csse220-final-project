@@ -24,7 +24,7 @@ public class FitnessFunctionAll1s implements FitnessFunction {
 				fitness++;
 			}
 		}
-		return (int) (fitness*100/chromosome.length);
+		return (int) (fitness*100.0/chromosome.length);
 	}
 
 }

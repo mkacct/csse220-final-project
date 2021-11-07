@@ -81,19 +81,19 @@ public class SimConfigUI extends AppWindow {
 	 */
 	private class SimConfigConfirmation extends JPanel {
 		public SimConfigConfirmation() {
-			JButton cancel = new JButton("Cancel");
-			cancel.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {SimConfigUI.this.dispose();}
-			});
-			this.add(cancel);
-
 			JButton submit = new JButton("Submit");
 			submit.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {SimConfigUI.this.submit();}
 			});
 			this.add(submit);
+
+			JButton cancel = new JButton("Cancel");
+			cancel.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {SimConfigUI.this.dispose();}
+			});
+			this.add(cancel);
 		}
 	}
 	
