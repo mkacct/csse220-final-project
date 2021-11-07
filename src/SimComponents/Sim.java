@@ -129,6 +129,15 @@ public class Sim {
 	 */
 	public void nextGen() {
 		ArrayList<Individual> parents = new ArrayList<Individual>();
+		
+		ArrayList<Individual> copyOver = new ArrayList<Individual>();
+		int numToCopy = (int)(this.elitism*pop.size());
+		while(numToCopy > 0) {
+			System.out.println(numToCopy);
+			copyOver.add(this.getBestIndividual());
+			pop.remove(this.getBestIndividual());
+			numToCopy--;
+		}
 
 		switch (selectionType) {
 		case "Truncation":
@@ -141,13 +150,15 @@ public class Sim {
 			parents = this.rankedSelection();
 			break;
 		}
+		
 		boolean odd = pop.size()%2==1;
-		pop = new ArrayList<Individual>();
+		pop = copyOver;
 		if(odd) {
 			Individual parent1 = this.getWorstIndividual(parents);
 			parents.remove(parent1);
 			pop.add(parent1.create(mutationRate));
 		}
+		
 		for (Individual indiv : parents) {
 			Individual child1 = indiv.create(mutationRate);
 			Individual child2 = indiv.create(mutationRate);
@@ -207,16 +218,16 @@ public class Sim {
 	 * 
 	 * @return
 	 */
-	public char[] getBestChromosome() {
+	public Individual getBestIndividual() {
 		int max = 0;
-		char[] bestChromosome = pop.get(0).getChromosome();
+		Individual bestIndividual = pop.get(0);
 		for (Individual indiv : pop) {
 			if (fitnessCalc.calcFitness(indiv) > max) {
 				max = fitnessCalc.calcFitness(indiv);
-				bestChromosome = indiv.getChromosome();
+				bestIndividual = indiv;
 			}
 		}
-		return bestChromosome;
+		return bestIndividual;
 	}
 	
 	/**
