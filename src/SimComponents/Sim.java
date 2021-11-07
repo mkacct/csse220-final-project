@@ -334,7 +334,35 @@ public class Sim {
 	 * @return
 	 */
 	private ArrayList<Individual> rankedSelection() {
-		return pop;
+		int num = 0;
+		pop.sort(compare);
+		ArrayList<Individual> rouletteWheel = new ArrayList<Individual>();
+		/*
+		 * Constructs a HashMap where each individual is referenced a number of times
+		 * equal to its fitness, so that when a number is randomly picked, the
+		 * probability of each individual being picked is weighted based on its fitness.
+		 */
+		for (int j = 0; j < pop.size(); j++) {
+			for (int i = 0; i < j; i++) {
+				rouletteWheel.add(pop.get(j));
+				num++;
+			}
+		}
+		ArrayList<Individual> parents = new ArrayList<Individual>();
+		/*
+		 * Randomly picks individuals with probabilities weighted by their fitness, adds
+		 * each individual to the parents list if it doesn't have it, and if it does,
+		 * prevents i from incrementing to ensure the right number of individuals end up
+		 * in the parents list.
+		 */
+		for (int i = 0, size = (int)(pop.size() / 2.0+0.5); i < size; i++) {
+			if (!parents.contains(rouletteWheel.get((int) (Math.random() * num)))) {
+				parents.add(rouletteWheel.get((int) (Math.random() * num)));
+			} else {
+				i--;
+			}
+		}
+		return parents;
 	}
 
 	/**
