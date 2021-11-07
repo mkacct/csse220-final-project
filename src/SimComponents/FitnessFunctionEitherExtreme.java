@@ -15,6 +15,6 @@ public class FitnessFunctionEitherExtreme implements FitnessFunction {
 		for (char c : chromosome) {
 			if (c == '1')  {ones++;}
 		}
-		return (int)((Math.abs(ones - (chromosome.length - ones)))*100/chromosome.length);
-	}	
+		return (int)((Math.abs(ones - (chromosome.length - ones)))*100.0/chromosome.length);
+	}
 }

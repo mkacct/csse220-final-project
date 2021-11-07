@@ -12,9 +12,9 @@ import java.util.Random;
  *         evolution
  */
 public class Sim {
-	public static final String[] FF_NAMES = { "All 1s", "Match smiley face" };
-	public static final String[] SELECTOR_NAMES = { "Truncation", "Roulette wheel", "Ranked" };
-	public static final String[] CROSSOVER_NAMES = { "None", "One point" };
+	public static final String[] FF_NAMES = {"All 1s", "Match smiley face", "Consecutive 1s", "Either extreme"};
+	public static final String[] SELECTOR_NAMES = {"Truncation", "Roulette wheel", "Ranked"};
+	public static final String[] CROSSOVER_NAMES = {"None", "One point"};
 
 	private ArrayList<Individual> pop;
 	private ArrayList<double[]> fitnessTracker;
@@ -387,11 +387,15 @@ public class Sim {
 	 */
 	public static FitnessFunction ffByName(String name) {
 		switch (name) {
-		case "All 1s":
-			return new FitnessFunctionAll1s();
-		case "Match smiley face":
-			String smileyFace = "0000000000000000000000100001000000000000000000000000000000000000000000010000001001111111100000000000";
-			return new FitnessFunctionMatchTarget(smileyFace.toCharArray());
+			case "All 1s":
+				return new FitnessFunctionAll1s();
+			case "Match smiley face":
+				String smileyFace = "0000000000000000000000100001000000000000000000000000000000000000000000010000001001111111100000000000";
+				return new FitnessFunctionMatchTarget(smileyFace.toCharArray());
+			case "Consecutive 1s":
+				return new FitnessFunctionConsecutive1s();
+			case "Either extreme":
+				return new FitnessFunctionEitherExtreme();
 		}
 		throw new IllegalArgumentException("Invalid fitness function name \"" + name + "\"");
 	}
