@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -13,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import Exceptions.DomainException;
+import Exceptions.FileFormatException;
 import Exceptions.FormValidationException;
 import Main.MiscUtil;
 import SimComponents.Sim;
@@ -147,16 +149,26 @@ public class SimConfigUI extends AppWindow {
 			return;
 		}
 		// form input is valid
-		new SimUI(
-			this.getParentWindow(),
-			this.form.getPopSize(),
-			this.form.getChromosomeSize(),
-			this.form.getFitnessFunction(),
-			this.form.getSelectionMode(),
-			this.form.getCrossoverMode(),
-			this.form.getMutationRate(),
-			this.form.getElitism()
-		);
+		// target file may still be invalid though
+		try {
+			new SimUI(
+				this.getParentWindow(),
+				this.form.getPopSize(),
+				this.form.getChromosomeSize(),
+				this.form.getFitnessFunction(),
+				this.form.getSelectionMode(),
+				this.form.getCrossoverMode(),
+				this.form.getMutationRate(),
+				this.form.getElitism()
+			);
+		} catch (FileNotFoundException ex) {
+			JOptionPane.showMessageDialog(this, "File \"target\" is required for the selected fitness function but was not found");
+			return;
+			
+		} catch (FileFormatException ex) {
+			JOptionPane.showMessageDialog(this, "File \"target\" is incorrectly formatted");
+			return;
+		}
 		this.dispose();
 	}
 }

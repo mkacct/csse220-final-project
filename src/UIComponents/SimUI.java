@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -19,6 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.Timer;
 
 import Exceptions.DomainException;
+import Exceptions.FileFormatException;
 import Main.App;
 import SimComponents.FitnessFunction;
 import SimComponents.Individual;
@@ -285,7 +287,7 @@ public class SimUI extends AppWindow {
 	 * @param elitism
 	 */
 	public SimUI(AppWindow parent, int popSize, int chromosomeSize, String ffName, String selectionMode, String crossoverMode,
-			double mutationRate, double elitism) {
+			double mutationRate, double elitism) throws FileNotFoundException, FileFormatException {
 		super(parent);
 
 		this.popSize = popSize;
