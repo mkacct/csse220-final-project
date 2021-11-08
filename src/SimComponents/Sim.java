@@ -384,6 +384,26 @@ public class Sim {
 		return chromosomes;
 	}
 
+	public double hammingDistance() {
+		double numPairs = 0;;
+		int[] numOnes = new int[pop.get(0).getChromosome().length];
+		int[] numZeroes = new int[pop.get(0).getChromosome().length];
+		for(Individual indiv: pop) {
+			char[] chromosome = indiv.getChromosome();
+			for(int i = 0; i < chromosome.length; i++) {
+				if(chromosome[i] == '0') {
+					numZeroes[i] = numZeroes[i] + 1;
+				} else if(chromosome[i] == '1') {
+					numOnes[i] = numOnes[i] + 1;
+				}
+			}
+		}
+		for(int i = 0; i < numOnes.length; i++) {
+			numPairs += numOnes[i]*numZeroes[i];
+		}
+		double hammingDistance = numPairs/(pop.size()*pop.get(0).getChromosome().length *(pop.get(0).getChromosome().length-1)/2);
+		return hammingDistance;
+	}
 	/**
 	 * Utility method returning the fitness function with the given name Uncertain
 	 * if this is permanent
@@ -406,10 +426,4 @@ public class Sim {
 		}
 		throw new IllegalArgumentException("Invalid fitness function name \"" + name + "\"");
 	}
-
 }
-
-/*
- * Add a way to store past min, max, and average values work on displaying
- * population Work on graph if maddie hasn't figure out ranked voting
- */
