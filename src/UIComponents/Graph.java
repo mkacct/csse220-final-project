@@ -17,7 +17,6 @@ import javax.swing.JComponent;
  */
 public class Graph extends JComponent {
 	ArrayList<double[]> dataPoints;
-	ArrayList<Line2D[]> lines;
 	Color[] colors;
 	int originX;
 	int originY;
@@ -35,7 +34,6 @@ public class Graph extends JComponent {
 		dataPoints = new ArrayList<double[]>();
 		dataPoints.add(initialData);
 		this.setPreferredSize(new Dimension(110, 100));
-		lines = new ArrayList<Line2D[]>();
 		this.colors = colors;
 	}
 
@@ -61,19 +59,12 @@ public class Graph extends JComponent {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		lines = new ArrayList<Line2D[]>();
 		Graphics2D g2d = (Graphics2D) g;
 		this.removeAll();
 		this.setPreferredSize(new Dimension(130, 30 + 20 * (Math.max(dataPoints.size(), 10))));
 		this.drawAxes(g2d);
 		for (int j = 0; j < dataPoints.size() - 1; j++) {
-			this.addLine(j);
-		}
-		for (int i = 0; i < this.lines.size(); i++) {
-			for(int j = 0; j < this.colors.length; j++) {
-				g2d.setColor(colors[j]);
-				g2d.draw(this.lines.get(i)[j]);
-			}
+			this.drawMyLine(j, g2d);
 		}
 	}
 
@@ -109,8 +100,7 @@ public class Graph extends JComponent {
 	 * 
 	 * @param index
 	 */
-	private void addLine(int index) {
-		Line2D[] linesToAdd = new Line2D[colors.length];
+	private void drawMyLine(int index, Graphics2D g2d) {
 		for(int line = 0; line < colors.length; line++) {
 			double startFitness = this.dataPoints.get(index)[line];
 			double endFitness = this.dataPoints.get(index + 1)[line];
@@ -118,9 +108,10 @@ public class Graph extends JComponent {
 			int xFinal = originX + (index + 1) * graphWidth / (Math.max(dataPoints.size(), 100));
 			int yInitial = originY - (int) (startFitness * graphHeight / 100);
 			int yFinal = originY - (int) (endFitness * graphHeight / 100);
-			linesToAdd[line] = new Line2D.Double(xInitial, yInitial, xFinal, yFinal);
+			Line2D lineToDraw = new Line2D.Double(xInitial, yInitial, xFinal, yFinal);
+			g2d.setColor(colors[line]);
+			g2d.draw(lineToDraw);
 		}
-		lines.add(linesToAdd);
 	}
 }
 
