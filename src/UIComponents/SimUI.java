@@ -311,8 +311,8 @@ public class SimUI extends AppWindow {
 		this.add(this.populationDisplay, BorderLayout.WEST);
 		this.fittestDisplay = new OneIndivDisplay(this.sim.getBestIndividual());
 		this.add(this.fittestDisplay, BorderLayout.EAST);
-		double[] data = { this.sim.getMinFitness(), this.sim.getAvgFitness(), this.sim.getMaxFitness() };
-		Color[] colors = {Color.red, Color.blue, Color.green};
+		double[] data = { this.sim.getMinFitness(), this.sim.getAvgFitness(), this.sim.getMaxFitness(),this.sim.hammingDistance() };
+		Color[] colors = {Color.red, Color.blue, Color.green, Color.yellow};
 		this.graph = new Graph(data, colors);
 		this.add(this.graph, BorderLayout.CENTER);
 		
@@ -362,7 +362,7 @@ public class SimUI extends AppWindow {
 	private void updateDisplay() {
 		this.populationDisplay.updatePopulation(this.sim.getChromosomes());
 		this.fittestDisplay.showIndiv(this.sim.getBestIndividual());
-		double[] data = { this.sim.getMinFitness(), this.sim.getAvgFitness(), this.sim.getMaxFitness() };
+		double[] data = { this.sim.getMinFitness(), this.sim.getAvgFitness(), this.sim.getMaxFitness(), this.sim.hammingDistance() };
 		this.graph.updateGraph(data);
 		this.graph.repaint();
 		this.revalidate();
