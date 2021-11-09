@@ -88,19 +88,23 @@ public class MainUI extends AppWindow {
 	 * Prompt the user for a size and make a new indiv
 	 */
 	private void newIndiv() {
-		String s = JOptionPane.showInputDialog(MainUI.this, "Enter size of chromosome:");
+		String s = JOptionPane.showInputDialog(this, "Enter size of chromosome:");
 		if (s == null) {return;}
 		int size = 0;
 		try {
 			size = Integer.parseInt(s);
 		} catch (NumberFormatException err) {
-			JOptionPane.showMessageDialog(MainUI.this, "Invalid size \"" + s + "\"");
+			JOptionPane.showMessageDialog(this, "Invalid size \"" + s + "\"");
 			return;
 		}
 		if (size > 0) {
+			if (size > 255) {
+				int res = JOptionPane.showConfirmDialog(this, "Size is a bit large, you sure?", "Warning", JOptionPane.OK_CANCEL_OPTION);
+				if (res != JOptionPane.OK_OPTION) {return;}
+			}
 			new EditorUI(this, size);
 		} else {
-			JOptionPane.showMessageDialog(MainUI.this, "Size must be at least 1");
+			JOptionPane.showMessageDialog(this, "Size must be at least 1");
 		}
 	}
 

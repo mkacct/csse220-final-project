@@ -150,6 +150,11 @@ public class SimConfigUI extends AppWindow {
 		}
 		// form input is valid
 		// target file may still be invalid though
+		// also size warning:
+		if ((this.form.getPopSize() > 255) || (this.form.getChromosomeSize() > 255)) {
+			int res = JOptionPane.showConfirmDialog(this, "Size is a bit large, you sure?", "Warning", JOptionPane.OK_CANCEL_OPTION);
+			if (res != JOptionPane.OK_OPTION) {return;}
+		}
 		try {
 			new SimUI(
 				this.getParentWindow(),
