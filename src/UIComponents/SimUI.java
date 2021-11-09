@@ -312,7 +312,8 @@ public class SimUI extends AppWindow {
 		this.fittestDisplay = new OneIndivDisplay(this.sim.getBestIndividual());
 		this.add(this.fittestDisplay, BorderLayout.EAST);
 		double[] data = { this.sim.getMinFitness(), this.sim.getAvgFitness(), this.sim.getMaxFitness() };
-		this.graph = new Graph(data);
+		Color[] colors = {Color.red, Color.blue, Color.green};
+		this.graph = new Graph(data, colors);
 		this.add(this.graph, BorderLayout.CENTER);
 		
 		this.showWindow();

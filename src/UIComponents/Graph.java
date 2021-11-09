@@ -17,9 +17,8 @@ import javax.swing.JComponent;
  */
 public class Graph extends JComponent {
 	ArrayList<double[]> dataPoints;
-	ArrayList<Line2D> minLine;
-	ArrayList<Line2D> avgLine;
-	ArrayList<Line2D> maxLine;
+	ArrayList<Line2D[]> lines;
+	Color[] colors;
 	int originX;
 	int originY;
 	int graphHeight;
@@ -32,13 +31,12 @@ public class Graph extends JComponent {
 	 *                    a double array of length 3 that has the initial min, max,
 	 *                    and average fitnesses for the population
 	 */
-	public Graph(double[] initialData) {
+	public Graph(double[] initialData, Color[] colors) {
 		dataPoints = new ArrayList<double[]>();
 		dataPoints.add(initialData);
 		this.setPreferredSize(new Dimension(110, 100));
-		minLine = new ArrayList<Line2D>();
-		avgLine = new ArrayList<Line2D>();
-		maxLine = new ArrayList<Line2D>();
+		lines = new ArrayList<Line2D[]>();
+		this.colors = colors;
 	}
 
 	/**
@@ -63,25 +61,19 @@ public class Graph extends JComponent {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		minLine = new ArrayList<Line2D>();
-		avgLine = new ArrayList<Line2D>();
-		maxLine = new ArrayList<Line2D>();
+		lines = new ArrayList<Line2D[]>();
 		Graphics2D g2d = (Graphics2D) g;
 		this.removeAll();
 		this.setPreferredSize(new Dimension(130, 30 + 20 * (Math.max(dataPoints.size(), 10))));
 		this.drawAxes(g2d);
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < dataPoints.size() - 1; j++) {
-				this.addLine(j, i);
-			}
+		for (int j = 0; j < dataPoints.size() - 1; j++) {
+			this.addLine(j);
 		}
-		for (int i = 0; i < this.minLine.size(); i++) {
-			g2d.setColor(Color.red);
-			g2d.draw(this.minLine.get(i));
-			g2d.setColor(Color.blue);
-			g2d.draw(this.avgLine.get(i));
-			g2d.setColor(Color.green);
-			g2d.draw(this.maxLine.get(i));
+		for (int i = 0; i < this.lines.size(); i++) {
+			for(int j = 0; j < this.colors.length; j++) {
+				g2d.setColor(colors[j]);
+				g2d.draw(this.lines.get(i)[j]);
+			}
 		}
 	}
 
@@ -116,27 +108,19 @@ public class Graph extends JComponent {
 	 * Draws the lines on the graph
 	 * 
 	 * @param index
-	 * @param line
 	 */
-	private void addLine(int index, int line) {
-		double startFitness = this.dataPoints.get(index)[line];
-		double endFitness = this.dataPoints.get(index + 1)[line];
-		int xInitial = originX + index * graphWidth / (Math.max(dataPoints.size(), 100));
-		int xFinal = originX + (index + 1) * graphWidth / (Math.max(dataPoints.size(), 100));
-		int yInitial = originY - (int) (startFitness * graphHeight / 100);
-		int yFinal = originY - (int) (endFitness * graphHeight / 100);
-		Line2D lineToAdd = new Line2D.Double(xInitial, yInitial, xFinal, yFinal);
-		switch (line) {
-		case 0:
-			minLine.add(lineToAdd);
-			break;
-		case 1:
-			avgLine.add(lineToAdd);
-			break;
-		case 2:
-			maxLine.add(lineToAdd);
-			break;
+	private void addLine(int index) {
+		Line2D[] linesToAdd = new Line2D[colors.length];
+		for(int line = 0; line < colors.length; line++) {
+			double startFitness = this.dataPoints.get(index)[line];
+			double endFitness = this.dataPoints.get(index + 1)[line];
+			int xInitial = originX + index * graphWidth / (Math.max(dataPoints.size(), 100));
+			int xFinal = originX + (index + 1) * graphWidth / (Math.max(dataPoints.size(), 100));
+			int yInitial = originY - (int) (startFitness * graphHeight / 100);
+			int yFinal = originY - (int) (endFitness * graphHeight / 100);
+			linesToAdd[line] = new Line2D.Double(xInitial, yInitial, xFinal, yFinal);
 		}
+		lines.add(linesToAdd);
 	}
 }
 
