@@ -385,12 +385,12 @@ public class Sim {
 	}
 
 	public double hammingDistance() {
-		double numPairs = 0;;
+		double numPairs = 0;
 		int[] numOnes = new int[pop.get(0).getChromosome().length];
 		int[] numZeroes = new int[pop.get(0).getChromosome().length];
-		for(Individual indiv: pop) {
-			char[] chromosome = indiv.getChromosome();
-			for(int i = 0; i < chromosome.length; i++) {
+		for(int i = 0; i < pop.get(0).getChromosome().length; i++) {
+			for(Individual indiv: pop) {
+				char[] chromosome = indiv.getChromosome();
 				if(chromosome[i] == '0') {
 					numZeroes[i] = numZeroes[i] + 1;
 				} else if(chromosome[i] == '1') {
@@ -402,7 +402,7 @@ public class Sim {
 			numPairs += numOnes[i]*numZeroes[i];
 		}
 		double hammingDistance = numPairs/(pop.size()*pop.get(0).getChromosome().length *(pop.get(0).getChromosome().length-1)/2);
-		return hammingDistance;
+		return hammingDistance*pop.size();
 	}
 	/**
 	 * Utility method returning the fitness function with the given name Uncertain
