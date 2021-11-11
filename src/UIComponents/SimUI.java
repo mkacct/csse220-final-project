@@ -256,19 +256,20 @@ public class SimUI extends AppWindow {
 		 * Construct one such display
 		 * @param indiv to show
 		 */
-		public OneIndivDisplay(Individual indiv) {
-			this.setLayout(new GridLayout(2, 1));
-			this.showIndiv(indiv);
+		public OneIndivDisplay(Individual indiv, int genCount) {
+			this.setLayout(new GridLayout(3, 1));
+			this.showIndiv(indiv, genCount);
 		}
 
 		/**
 		 * Set the indiv being displayed
 		 * @param indiv to show
 		 */
-		public void showIndiv(Individual indiv) {
+		public void showIndiv(Individual indiv, int genCount) {
 			this.removeAll();
 			this.add(new ChromosomeDisplay(indiv.getChromosome()));
 			this.add(new JLabel("Fitness: " + fitnessFunction.calcFitness(indiv)));
+			this.add(new JLabel("Gen: " + genCount));
 		}
 	}
 
@@ -309,7 +310,7 @@ public class SimUI extends AppWindow {
 
 		this.populationDisplay = new PopulationDisplay(this.sim.getChromosomes());
 		this.add(this.populationDisplay, BorderLayout.WEST);
-		this.fittestDisplay = new OneIndivDisplay(this.sim.getBestIndividual());
+		this.fittestDisplay = new OneIndivDisplay(this.sim.getBestIndividual(), 0);
 		this.add(this.fittestDisplay, BorderLayout.EAST);
 		double[] data = this.updateData();
 		Color[] colors = this.graphColors();
@@ -370,7 +371,7 @@ public class SimUI extends AppWindow {
 	 */
 	private void updateDisplay() {
 		this.populationDisplay.updatePopulation(this.sim.getChromosomes());
-		this.fittestDisplay.showIndiv(this.sim.getBestIndividual());
+		this.fittestDisplay.showIndiv(this.sim.getBestIndividual(), this.genCount);
 		double[] data = { this.sim.getMinFitness(), this.sim.getAvgFitness(), this.sim.getMaxFitness(), this.sim.hammingDistance() };
 		this.graph.updateGraph(data);
 		this.graph.repaint();
