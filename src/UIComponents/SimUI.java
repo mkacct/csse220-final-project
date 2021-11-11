@@ -255,6 +255,7 @@ public class SimUI extends AppWindow {
 		/**
 		 * Construct one such display
 		 * @param indiv to show
+		 * @param genCount what gen it should be labeled as
 		 */
 		public OneIndivDisplay(Individual indiv, int genCount) {
 			this.setLayout(new GridLayout(3, 1));
@@ -264,6 +265,7 @@ public class SimUI extends AppWindow {
 		/**
 		 * Set the indiv being displayed
 		 * @param indiv to show
+		 * @param genCount what gen it should be labeled as
 		 */
 		public void showIndiv(Individual indiv, int genCount) {
 			this.removeAll();
