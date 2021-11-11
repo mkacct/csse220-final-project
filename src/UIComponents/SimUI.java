@@ -311,14 +311,23 @@ public class SimUI extends AppWindow {
 		this.add(this.populationDisplay, BorderLayout.WEST);
 		this.fittestDisplay = new OneIndivDisplay(this.sim.getBestIndividual());
 		this.add(this.fittestDisplay, BorderLayout.EAST);
-		double[] data = { this.sim.getMinFitness(), this.sim.getAvgFitness(), this.sim.getMaxFitness(),this.sim.hammingDistance() };
-		Color[] colors = {Color.red, Color.blue, Color.green, Color.yellow};
+		double[] data = this.updateData();
+		Color[] colors = this.graphColors();
 		this.graph = new Graph(data, colors);
 		this.add(this.graph, BorderLayout.CENTER);
 		
 		this.showWindow();
 	}
 	
+	private double[] updateData() {
+		double[] data = { this.sim.getMinFitness(), this.sim.getAvgFitness(), this.sim.getMaxFitness(),this.sim.hammingDistance() };
+		return data;
+	}
+	
+	private Color[] graphColors() {
+		Color[] colors = {Color.red, Color.blue, Color.green, Color.yellow};
+		return colors;
+	}
 	/**
 	 * Creates the sim object; also handles some other reset things
 	 */
