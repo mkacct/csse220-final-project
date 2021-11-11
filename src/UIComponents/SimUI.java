@@ -314,22 +314,25 @@ public class SimUI extends AppWindow {
 		this.add(this.populationDisplay, BorderLayout.WEST);
 		this.fittestDisplay = new OneIndivDisplay(this.sim.getBestIndividual(), 0);
 		this.add(this.fittestDisplay, BorderLayout.EAST);
-		double[] data = this.updateData();
-		Color[] colors = this.graphColors();
-		this.graph = new Graph(data, colors);
+		this.graph = new Graph(this.updateData(this.sim), this.graphColors());
 		this.add(this.graph, BorderLayout.CENTER);
 		
 		this.showWindow();
 	}
 	
-	private double[] updateData() {
-		double[] data = { this.sim.getMinFitness(), this.sim.getAvgFitness(), this.sim.getMaxFitness(),this.sim.hammingDistance() };
+	public double[] updateData(Sim sim) {
+		double[] data = { sim.getMinFitness(), sim.getAvgFitness(), sim.getMaxFitness(), sim.hammingDistance() };
 		return data;
 	}
 	
-	private Color[] graphColors() {
+	public Color[] graphColors() {
 		Color[] colors = {Color.red, Color.blue, Color.green, Color.yellow};
 		return colors;
+	}
+	
+	public String[] graphLabels() {
+		String[] labels = {"Min fitness", "Avg fitness", "Max fitness", "Hamming distance"};
+		return labels;
 	}
 	/**
 	 * Creates the sim object; also handles some other reset things
@@ -374,8 +377,7 @@ public class SimUI extends AppWindow {
 	private void updateDisplay() {
 		this.populationDisplay.updatePopulation(this.sim.getChromosomes());
 		this.fittestDisplay.showIndiv(this.sim.getBestIndividual(), this.genCount);
-		double[] data = { this.sim.getMinFitness(), this.sim.getAvgFitness(), this.sim.getMaxFitness(), this.sim.hammingDistance() };
-		this.graph.updateGraph(data);
+		this.graph.updateGraph(this.updateData(sim));
 		this.graph.repaint();
 		this.revalidate();
 	}

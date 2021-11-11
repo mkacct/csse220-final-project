@@ -18,9 +18,9 @@ import Main.FileUtil;
  *         evolution
  */
 public class Sim {
-	public static final String[] FF_NAMES = {"All 1s", "Match target", "Consecutive 1s", "Either extreme"};
-	public static final String[] SELECTOR_NAMES = {"Truncation", "Roulette wheel", "Ranked"};
-	public static final String[] CROSSOVER_NAMES = {"None", "One point"};
+	public static final String[] FF_NAMES = { "All 1s", "Match target", "Consecutive 1s", "Either extreme" };
+	public static final String[] SELECTOR_NAMES = { "Truncation", "Roulette wheel", "Ranked" };
+	public static final String[] CROSSOVER_NAMES = { "None", "One point" };
 
 	private ArrayList<Individual> pop;
 	private ArrayList<double[]> fitnessTracker;
@@ -169,7 +169,7 @@ public class Sim {
 		case "None":
 			break;
 		case "One point":
-			if(parents.size()%2==1) {
+			if (parents.size() % 2 == 1) {
 				Individual parent1 = this.getWorstIndividual(parents);
 				parents.remove(parent1);
 				pop.add(parent1.create(mutationRate));
@@ -251,6 +251,25 @@ public class Sim {
 	}
 
 	/**
+	 * Returns the average number of times a given symbol appears in the chromosomes
+	 * of this population
+	 * 
+	 * @param symbol
+	 * @return
+	 */
+	public double getAverageOfSymbol(char symbol) {
+		double numSymbol = 0;
+		for (Individual indiv : pop) {
+			for (char c : indiv.getChromosome()) {
+				if (c == symbol) {
+					numSymbol++;
+				}
+			}
+		}
+		return numSymbol / pop.size();
+	}
+
+	/**
 	 * Returns the chromosome of the individual with the best fitness. If multiple
 	 * have the same fitness, returns the first of them
 	 * 
@@ -324,7 +343,7 @@ public class Sim {
 		 * prevents i from incrementing to ensure the right number of individuals end up
 		 * in the parents list.
 		 */
-		for (int i = 0, size = (int)(pop.size() / 2.0+0.5); i < size; i++) {
+		for (int i = 0, size = (int) (pop.size() / 2.0 + 0.5); i < size; i++) {
 			if (!parents.contains(rouletteWheel.get((int) (Math.random() * num)))) {
 				parents.add(rouletteWheel.get((int) (Math.random() * num)));
 			} else {
@@ -361,7 +380,7 @@ public class Sim {
 		 * prevents i from incrementing to ensure the right number of individuals end up
 		 * in the parents list.
 		 */
-		for (int i = 0, size = (int)(pop.size() / 2.0+0.5); i < size; i++) {
+		for (int i = 0, size = (int) (pop.size() / 2.0 + 0.5); i < size; i++) {
 			if (!parents.contains(rouletteWheel.get((int) (Math.random() * num)))) {
 				parents.add(rouletteWheel.get((int) (Math.random() * num)));
 			} else {
@@ -384,26 +403,33 @@ public class Sim {
 		return chromosomes;
 	}
 
+	/**
+	 * Returns the Hamming distance of the population
+	 * 
+	 * @return
+	 */
 	public double hammingDistance() {
 		double numPairs = 0;
 		int[] numOnes = new int[pop.get(0).getChromosome().length];
 		int[] numZeroes = new int[pop.get(0).getChromosome().length];
-		for(int i = 0; i < pop.get(0).getChromosome().length; i++) {
-			for(Individual indiv: pop) {
+		for (int i = 0; i < pop.get(0).getChromosome().length; i++) {
+			for (Individual indiv : pop) {
 				char[] chromosome = indiv.getChromosome();
-				if(chromosome[i] == '0') {
+				if (chromosome[i] == '0') {
 					numZeroes[i] = numZeroes[i] + 1;
-				} else if(chromosome[i] == '1') {
+				} else if (chromosome[i] == '1') {
 					numOnes[i] = numOnes[i] + 1;
 				}
 			}
 		}
-		for(int i = 0; i < numOnes.length; i++) {
-			numPairs += numOnes[i]*numZeroes[i];
+		for (int i = 0; i < numOnes.length; i++) {
+			numPairs += numOnes[i] * numZeroes[i];
 		}
-		double hammingDistance = numPairs/(pop.size()*pop.get(0).getChromosome().length *(pop.get(0).getChromosome().length-1)/2);
-		return hammingDistance*pop.size();
+		double hammingDistance = numPairs
+				/ (pop.size() * pop.get(0).getChromosome().length * (pop.get(0).getChromosome().length - 1) / 2);
+		return hammingDistance * pop.size();
 	}
+
 	/**
 	 * Utility method returning the fitness function with the given name Uncertain
 	 * if this is permanent
@@ -413,16 +439,16 @@ public class Sim {
 	 */
 	public static FitnessFunction ffByName(String name) throws FileNotFoundException, FileFormatException {
 		switch (name) {
-			case "All 1s":
-				return new FitnessFunctionAll1s();
-			case "Match target":
-				char[] target;
-				target = FileUtil.loadIndiv(new File(App.SAVE_DIR + "target")).getChromosome();
-				return new FitnessFunctionMatchTarget(target);
-			case "Consecutive 1s":
-				return new FitnessFunctionConsecutive1s();
-			case "Either extreme":
-				return new FitnessFunctionEitherExtreme();
+		case "All 1s":
+			return new FitnessFunctionAll1s();
+		case "Match target":
+			char[] target;
+			target = FileUtil.loadIndiv(new File(App.SAVE_DIR + "target")).getChromosome();
+			return new FitnessFunctionMatchTarget(target);
+		case "Consecutive 1s":
+			return new FitnessFunctionConsecutive1s();
+		case "Either extreme":
+			return new FitnessFunctionEitherExtreme();
 		}
 		throw new IllegalArgumentException("Invalid fitness function name \"" + name + "\"");
 	}
