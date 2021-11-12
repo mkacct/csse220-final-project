@@ -314,7 +314,7 @@ public class SimUI extends AppWindow {
 		this.add(this.populationDisplay, BorderLayout.WEST);
 		this.fittestDisplay = new OneIndivDisplay(this.sim.getBestIndividual(), 0);
 		this.add(this.fittestDisplay, BorderLayout.EAST);
-		this.graph = new Graph(this.updateData(this.sim), this.graphColors());
+		this.graph = new Graph(this.updateData(this.sim), this.graphColors(), this.graphLabels());
 		this.add(this.graph, BorderLayout.CENTER);
 		
 		this.showWindow();

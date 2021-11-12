@@ -18,6 +18,7 @@ import javax.swing.JComponent;
 public class Graph extends JComponent {
 	ArrayList<double[]> dataPoints;
 	Color[] colors;
+	String[] labels;
 	int originX;
 	int originY;
 	int graphHeight;
@@ -30,11 +31,12 @@ public class Graph extends JComponent {
 	 *                    a double array of length 3 that has the initial min, max,
 	 *                    and average fitnesses for the population
 	 */
-	public Graph(double[] initialData, Color[] colors) {
+	public Graph(double[] initialData, Color[] colors, String[] labels) {
 		dataPoints = new ArrayList<double[]>();
 		dataPoints.add(initialData);
-		this.setPreferredSize(new Dimension(110, 100));
+		this.setSize(new Dimension(600, 100));
 		this.colors = colors;
+		this.labels = labels;
 	}
 
 	/**
@@ -61,10 +63,19 @@ public class Graph extends JComponent {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
 		this.removeAll();
-		this.setPreferredSize(new Dimension(130, 30 + 20 * (Math.max(dataPoints.size(), 10))));
 		this.drawAxes(g2d);
+		this.drawKey(g2d);
 		for (int j = 0; j < dataPoints.size() - 1; j++) {
 			this.drawMyLine(j, g2d);
+		}
+	}
+
+	private void drawKey(Graphics2D g) {
+		for(int i = 0; i < this.colors.length; i++) {
+			g.setColor(colors[i]);
+			g.fillRect(originX+graphWidth+5, 20*(i+1), 10, 10);
+			g.setColor(Color.black);
+			g.drawString(this.labels[i], originX+graphWidth+15, 20*(i+1)+10);
 		}
 	}
 
@@ -75,7 +86,7 @@ public class Graph extends JComponent {
 	 */
 	private void drawAxes(Graphics2D g) {
 		g.setColor(Color.black);
-		graphWidth = this.getWidth() - 30;
+		graphWidth = this.getWidth() - 170;
 		graphHeight = this.getHeight() - 20;
 		originX = 20;
 		originY = graphHeight + 10;
