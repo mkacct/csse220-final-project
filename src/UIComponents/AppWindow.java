@@ -29,7 +29,7 @@ public abstract class AppWindow extends JFrame {
 	 */
 	public void showWindow() {
 		this.pack();
-		this.setResizable(false);
+		// this.setResizable(false);
 		if (this.parent != null) {
 			this.setLocationRelativeTo(parent);
 		} else {
