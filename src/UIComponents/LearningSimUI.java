@@ -31,4 +31,9 @@ public class LearningSimUI extends SimUI {
 		String[] labels = {"Min fitness", "Avg fitness", "Max fitness", "Hamming distance", "Number of 0s", "Number of 1s", "Number of ?s"};
 		return labels;
 	}
+	
+	@Override
+	public boolean includesQuestionMarks() {
+		return true;
+	}
 }

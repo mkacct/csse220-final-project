@@ -343,12 +343,15 @@ public class SimUI extends AppWindow {
 			this.timer = null;
 		}
 		this.sim = new Sim(this.popSize, this.chromosomeSize, this.mutationRate, this.fitnessFunction,
-				this.selectionMode, this.elitism, this.crossoverMode);
+				this.selectionMode, this.elitism, this.crossoverMode, this.includesQuestionMarks());
 		this.genCount = 0;
 		this.tempGenCount = 0;
 		this.setSimState(0);
 	}
 
+	public boolean includesQuestionMarks() {
+		return false;
+	}
 	/**
 	 * Sets the sim state value
 	 * 

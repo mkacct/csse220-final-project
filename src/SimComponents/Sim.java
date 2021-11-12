@@ -30,6 +30,7 @@ public class Sim {
 	String selectionType;
 	String crossoverMode;
 	double elitism;
+	boolean includesQuestionMarks;
 
 	/**
 	 * Creates a new Sim with population 100 of chromosomes of size 100, with a
@@ -43,7 +44,7 @@ public class Sim {
 		pop = new ArrayList<Individual>();
 		fitnessCalc = new FitnessFunctionAll1s();
 		for (int i = 0; i < 100; i++) {
-			pop.add(new Individual(100, new Random()));
+			pop.add(new Individual(100, new Random(), false));
 		}
 		compare = new CompareIndividual(fitnessCalc);
 		this.selectionType = "Truncation";
@@ -66,7 +67,7 @@ public class Sim {
 		pop = new ArrayList<Individual>();
 		fitnessCalc = new FitnessFunctionAll1s();
 		for (int i = 0; i < popSize; i++) {
-			pop.add(new Individual(indivSize, new Random()));
+			pop.add(new Individual(indivSize, new Random(), false));
 		}
 		compare = new CompareIndividual(fitnessCalc);
 		this.selectionType = "Truncation";
@@ -88,7 +89,7 @@ public class Sim {
 		this.pop = new ArrayList<Individual>();
 		this.fitnessCalc = fitnessCalc;
 		for (int i = 0; i < 100; i++) {
-			pop.add(new Individual(100, new Random()));
+			pop.add(new Individual(100, new Random(), false));
 		}
 		compare = new CompareIndividual(fitnessCalc);
 		this.selectionType = selectionType;
@@ -113,11 +114,11 @@ public class Sim {
 	 * @param selectionType
 	 */
 	public Sim(int popSize, int indivSize, double rate, FitnessFunction fitnessCalc, String selectionType,
-			double elitism, String crossoverMode) {
+			double elitism, String crossoverMode, boolean isLearning) {
 		this.pop = new ArrayList<Individual>();
 		this.fitnessCalc = fitnessCalc;
 		for (int i = 0; i < popSize; i++) {
-			pop.add(new Individual(indivSize, new Random()));
+			pop.add(new Individual(indivSize, new Random(), isLearning));
 		}
 		compare = new CompareIndividual(fitnessCalc);
 		this.selectionType = selectionType;
@@ -127,6 +128,7 @@ public class Sim {
 		fitnessTracker.add(fitness);
 		this.elitism = elitism;
 		this.crossoverMode = crossoverMode;
+		this.includesQuestionMarks = isLearning;
 	}
 
 	/**
