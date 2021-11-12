@@ -62,7 +62,7 @@ public class SimConfigUI extends AppWindow {
 			this.add(this.mutationRate);
 
 			this.add(new JLabel("Elitism"));
-			this.elitism = new JTextField("0", 5);
+			this.elitism = new JTextField("0.01", 5);
 			this.add(this.elitism);
 
 			this.setLayout(new GridLayout(this.getComponentCount() / 2, 2));

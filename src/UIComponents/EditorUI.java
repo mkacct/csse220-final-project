@@ -55,7 +55,7 @@ public class EditorUI extends AppWindow {
 
 			this.add(new JLabel("Mutation rate:"));
 			
-			JTextField mutate = new JTextField("0", 5);
+			JTextField mutate = new JTextField("0.01", 5);
 			ActionListener mutateListener = new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
