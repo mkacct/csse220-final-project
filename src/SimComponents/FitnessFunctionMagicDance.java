@@ -24,25 +24,23 @@ public class FitnessFunctionMagicDance implements FitnessFunction {
 	 */
 	@Override
 	public int calcFitness(Individual indiv) {
+		char[] chromosome = indiv.getChromosome();
 		for (int i = 0; i < FitnessFunctionMagicDance.DAYS; i++) {
-			Individual guess = FitnessFunctionMagicDance.replaceQuestionMarks(indiv);
-			if (this.usingFF.calcFitness(guess) == 100) {
-				return (int) ((FitnessFunctionMagicDance.DAYS - i) * 100.0 / FitnessFunctionMagicDance.DAYS);
+			boolean allOnes = true;
+			for(int j = 0; j < chromosome.length; j++) {
+				if(chromosome[j] == '0') {
+					return 1;
+				}else if(chromosome[j]=='?'){
+					if('0' == ((Math.random() >= 0.5) ? '1' : '0')) {
+						allOnes = false;
+						break;
+					}
+				}
+			}
+			if(allOnes == true) {
+				return (int)(1 + (FitnessFunctionMagicDance.DAYS-i)*19.0/1000);
 			}
 		}
-		return 0;
-	}
-
-	/**
-	 * Return indiv but without question marks anymore
-	 * @param indiv assuming char set is "01?"
-	 * @return indiv but with question marks replaced with random binary (char set "01")
-	 */
-	public static Individual replaceQuestionMarks(Individual indiv) {
-		char[] chromosome = indiv.getChromosome();
-		for (int i = 0; i < chromosome.length; i++) {
-			if (chromosome[i] == '?') {chromosome[i] = (Math.random() >= 0.5) ? '1' : '0';}
-		}
-		return new Individual(chromosome, "01".toCharArray());
+		return 1;
 	}
 }

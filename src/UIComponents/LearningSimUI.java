@@ -11,7 +11,7 @@ public class LearningSimUI extends SimUI {
 
 	public LearningSimUI(AppWindow parent)
 			throws FileNotFoundException, FileFormatException {
-		super(parent, 1000, 20, "Magic Dance", "Truncation", "One point", 0, 0);
+		super(parent, 1000, 20, "Magic Dance", "Roulette wheel", "One point", 0, 0);
 	}
 	
 	@Override

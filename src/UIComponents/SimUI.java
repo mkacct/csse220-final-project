@@ -232,6 +232,7 @@ public class SimUI extends AppWindow {
 			grid.setVgap(0);
 			this.setLayout(grid);
 			this.updatePopulation(chromosomes);
+			this.setSize(new Dimension((int)Math.sqrt(chromosomes.size())*30, (int)Math.sqrt(chromosomes.size())*30));
 		}
 
 		/**
@@ -244,6 +245,12 @@ public class SimUI extends AppWindow {
 			for (int i = 0; i < chromosomes.size(); i++) {
 				this.add(new ChromosomeDisplay(chromosomes.get(i)));
 			}
+		}
+		
+		@Override
+		public void setBounds(int x, int y, int width, int height) {
+			int sideLength = Math.min(width, height);
+			super.setBounds(x, y, sideLength, sideLength);
 		}
 	}
 
