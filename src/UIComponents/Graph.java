@@ -34,7 +34,6 @@ public class Graph extends JComponent {
 	public Graph(double[] initialData, Color[] colors, String[] labels) {
 		dataPoints = new ArrayList<double[]>();
 		dataPoints.add(initialData);
-		this.setSize(new Dimension(600, 100));
 		this.colors = colors;
 		this.labels = labels;
 	}

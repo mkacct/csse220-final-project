@@ -422,17 +422,17 @@ public class Sim {
 					numZeroes[i] = numZeroes[i] + 1;
 				} else if (chromosome[i] == '1') {
 					numOnes[i] = numOnes[i] + 1;
-				} else if(chromosome[i] == '?') {
+				} else if (chromosome[i] == '?') {
 					numQs[i] += 1;
 				}
 			}
 		}
 		for (int i = 0; i < numOnes.length; i++) {
-			numPairs += (numOnes[i] * numZeroes[i] + numOnes[i]*numQs[i]+numZeroes[i]*numQs[i]);
+			numPairs += (numOnes[i] * numZeroes[i] + numOnes[i] * numQs[i] + numZeroes[i] * numQs[i]);
 		}
-		double hammingDistance = numPairs
-				/ (pop.size()*pop.get(0).getChromosome().length * (pop.get(0).getChromosome().length - 1) / 2);
-		return hammingDistance * pop.size();
+		double hammingDistance = numPairs / (pop.size() * pop.get(0).getChromosome().length * (pop.size() - 1) / 2);
+		return hammingDistance * 100; // returns hamming distance scaled to be visible on a graph from 0 to 100
+										// instead of 0 to 1
 	}
 
 	/**
@@ -444,18 +444,18 @@ public class Sim {
 	 */
 	public static FitnessFunction ffByName(String name) throws FileNotFoundException, FileFormatException {
 		switch (name) {
-			case "All 1s":
-				return new FitnessFunctionAll1s();
-			case "Match target":
-				char[] target;
-				target = FileUtil.loadIndiv(new File(App.SAVE_DIR + "target")).getChromosome();
-				return new FitnessFunctionMatchTarget(target);
-			case "Consecutive 1s":
-				return new FitnessFunctionConsecutive1s();
-			case "Either extreme":
-				return new FitnessFunctionEitherExtreme();
-			case "Magic Dance": // for the research part
-				return new FitnessFunctionMagicDance();
+		case "All 1s":
+			return new FitnessFunctionAll1s();
+		case "Match target":
+			char[] target;
+			target = FileUtil.loadIndiv(new File(App.SAVE_DIR + "target")).getChromosome();
+			return new FitnessFunctionMatchTarget(target);
+		case "Consecutive 1s":
+			return new FitnessFunctionConsecutive1s();
+		case "Either extreme":
+			return new FitnessFunctionEitherExtreme();
+		case "Magic Dance": // for the research part
+			return new FitnessFunctionMagicDance();
 		}
 		throw new IllegalArgumentException("Invalid fitness function name \"" + name + "\"");
 	}

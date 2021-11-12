@@ -106,12 +106,12 @@ public class SimUI extends AppWindow {
 					c = Color.black;
 				}
 				g.setColor(c);
-				int x = (int) (num % Math.sqrt(chromosome.length)
-						* (int) (this.getWidth() / Math.sqrt(chromosome.length)));
+				int x = (int) (num % (int)Math.sqrt(chromosome.length)
+						* (int) (this.getWidth() / (int)Math.sqrt(chromosome.length)));
 				int y = (int) (num / Math.sqrt(chromosome.length))
-						* (int) (this.getHeight() / Math.sqrt(chromosome.length));
-				int width = (int) (this.getWidth() / Math.sqrt(chromosome.length));
-				int height = (int) (this.getHeight() / Math.sqrt(chromosome.length));
+						* (int) (this.getHeight() / (int)Math.sqrt(chromosome.length));
+				int width = (int) (this.getWidth() / (int)Math.sqrt(chromosome.length));
+				int height = (int) (this.getHeight() / (int)Math.sqrt(chromosome.length));
 				g.fillRect(x, y, width, height);
 			}
 			g.setColor(Color.black);
@@ -123,7 +123,7 @@ public class SimUI extends AppWindow {
 		 */
 		@Override
 		public void setBounds(int x, int y, int width, int height) {
-			int sideLength = Math.min(width, height);
+			int sideLength =  Math.max(5, Math.min(width, height));
 			super.setBounds(x, y, sideLength, sideLength);
 		}
 	}
@@ -227,12 +227,11 @@ public class SimUI extends AppWindow {
 		 * @param chromosomes
 		 */
 		public PopulationDisplay(ArrayList<char[]> chromosomes) {
-			GridLayout grid = new GridLayout(0, (int) Math.sqrt(chromosomes.get(0).length));
+			GridLayout grid = new GridLayout(0, (int) Math.sqrt(chromosomes.size()));
 			grid.setHgap(0);
 			grid.setVgap(0);
 			this.setLayout(grid);
 			this.updatePopulation(chromosomes);
-			this.setSize(new Dimension((int)Math.sqrt(chromosomes.size())*30, (int)Math.sqrt(chromosomes.size())*30));
 		}
 
 		/**
@@ -247,11 +246,6 @@ public class SimUI extends AppWindow {
 			}
 		}
 		
-		@Override
-		public void setBounds(int x, int y, int width, int height) {
-			int sideLength = Math.min(width, height);
-			super.setBounds(x, y, sideLength, sideLength);
-		}
 	}
 
 	/**
@@ -323,7 +317,10 @@ public class SimUI extends AppWindow {
 		this.add(this.fittestDisplay, BorderLayout.EAST);
 		this.graph = new Graph(this.updateData(this.sim), this.graphColors(), this.graphLabels());
 		this.add(this.graph, BorderLayout.CENTER);
-		
+
+		this.graph.setPreferredSize(new Dimension(600,100));
+
+		this.pack();
 		this.showWindow();
 	}
 	
