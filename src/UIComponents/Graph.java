@@ -70,6 +70,10 @@ public class Graph extends JComponent {
 		}
 	}
 
+	/**
+	 * Draws a key to the graph
+	 * @param g
+	 */
 	private void drawKey(Graphics2D g) {
 		for(int i = 0; i < this.colors.length; i++) {
 			g.setColor(colors[i]);

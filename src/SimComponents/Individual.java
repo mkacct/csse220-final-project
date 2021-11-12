@@ -45,10 +45,15 @@ public class Individual {
 	 *             Constraints: size >= 0
 	 * @param rnd
 	 */
-	public Individual(int size, Random rnd) {
+	public Individual(int size, Random rnd, boolean isLearning) {
 		this.chromosome = new char[size];
-		char[] charSet = { '0', '1' };
-		this.charSet = charSet;
+		if(isLearning) {
+			char[] charSet = {'0', '1', '?', '?'};
+			this.charSet = charSet;
+		} else {
+			char[] charSet = { '0', '1' };
+			this.charSet = charSet;
+		}
 		this.initializeRandom(rnd);
 	}
 
