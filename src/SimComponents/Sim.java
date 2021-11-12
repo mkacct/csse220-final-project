@@ -439,16 +439,18 @@ public class Sim {
 	 */
 	public static FitnessFunction ffByName(String name) throws FileNotFoundException, FileFormatException {
 		switch (name) {
-		case "All 1s":
-			return new FitnessFunctionAll1s();
-		case "Match target":
-			char[] target;
-			target = FileUtil.loadIndiv(new File(App.SAVE_DIR + "target")).getChromosome();
-			return new FitnessFunctionMatchTarget(target);
-		case "Consecutive 1s":
-			return new FitnessFunctionConsecutive1s();
-		case "Either extreme":
-			return new FitnessFunctionEitherExtreme();
+			case "All 1s":
+				return new FitnessFunctionAll1s();
+			case "Match target":
+				char[] target;
+				target = FileUtil.loadIndiv(new File(App.SAVE_DIR + "target")).getChromosome();
+				return new FitnessFunctionMatchTarget(target);
+			case "Consecutive 1s":
+				return new FitnessFunctionConsecutive1s();
+			case "Either extreme":
+				return new FitnessFunctionEitherExtreme();
+			case "Magic Dance": // for the research part
+				return new FitnessFunctionMagicDance(new FitnessFunctionAll1s());
 		}
 		throw new IllegalArgumentException("Invalid fitness function name \"" + name + "\"");
 	}

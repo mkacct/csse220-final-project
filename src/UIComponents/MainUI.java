@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -14,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import Exceptions.FileFormatException;
 import Main.App;
 
 /**
@@ -50,6 +52,13 @@ public class MainUI extends AppWindow {
 			});
 			this.add(newSim);
 
+			JButton newResearchSim = new JButton("New Sim (Research)");
+			newResearchSim.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {MainUI.this.newResearchSim();}
+			});
+			this.add(newResearchSim);
+
 			JButton newEditor = new JButton("New Indiv");
 			newEditor.addActionListener(new ActionListener() {
 				@Override
@@ -82,6 +91,19 @@ public class MainUI extends AppWindow {
 	 */
 	private void newSim() {
 		new SimConfigUI(this);
+	}
+
+	/**
+	 * Open the research sim
+	 */
+	private void newResearchSim() {
+		try {
+			new LearningSimUI(this);
+		} catch (FileFormatException | FileNotFoundException ex) {
+			// should never happpen
+			ex.printStackTrace();
+			return;
+		}
 	}
 
 	/**
