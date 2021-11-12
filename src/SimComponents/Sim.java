@@ -414,6 +414,7 @@ public class Sim {
 		double numPairs = 0;
 		int[] numOnes = new int[pop.get(0).getChromosome().length];
 		int[] numZeroes = new int[pop.get(0).getChromosome().length];
+		int[] numQs = new int[pop.get(0).getChromosome().length];
 		for (int i = 0; i < pop.get(0).getChromosome().length; i++) {
 			for (Individual indiv : pop) {
 				char[] chromosome = indiv.getChromosome();
@@ -421,15 +422,17 @@ public class Sim {
 					numZeroes[i] = numZeroes[i] + 1;
 				} else if (chromosome[i] == '1') {
 					numOnes[i] = numOnes[i] + 1;
+				} else if(chromosome[i] == '?') {
+					numQs[i] += 1;
 				}
 			}
 		}
 		for (int i = 0; i < numOnes.length; i++) {
-			numPairs += numOnes[i] * numZeroes[i];
+			numPairs += (numOnes[i] * numZeroes[i] + numOnes[i]*numQs[i]+numZeroes[i]*numQs[i]);
 		}
 		double hammingDistance = numPairs
-				/ (pop.size() * pop.get(0).getChromosome().length * (pop.get(0).getChromosome().length - 1) / 2);
-		return hammingDistance * pop.size();
+				/ (pop.size()*pop.get(0).getChromosome().length * (pop.get(0).getChromosome().length - 1) / 2);
+		return hammingDistance * 100;
 	}
 
 	/**
