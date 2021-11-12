@@ -9,14 +9,11 @@ package SimComponents;
 public class FitnessFunctionMagicDance implements FitnessFunction {
 	public static final int DAYS = 1000;
 
-	private FitnessFunction usingFF;
 
 	/**
-	 * Construct the fitness function for the research project
-	 * @param usingFF the fitness function to use this on top of
+	 * Constructs the fitness function
 	 */
-	public FitnessFunctionMagicDance(FitnessFunction usingFF) {
-		this.usingFF = usingFF;
+	public FitnessFunctionMagicDance() {
 	}
 
 	/**

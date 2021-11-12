@@ -432,7 +432,7 @@ public class Sim {
 		}
 		double hammingDistance = numPairs
 				/ (pop.size()*pop.get(0).getChromosome().length * (pop.get(0).getChromosome().length - 1) / 2);
-		return hammingDistance * 100;
+		return hammingDistance * pop.size();
 	}
 
 	/**
@@ -455,7 +455,7 @@ public class Sim {
 			case "Either extreme":
 				return new FitnessFunctionEitherExtreme();
 			case "Magic Dance": // for the research part
-				return new FitnessFunctionMagicDance(new FitnessFunctionAll1s());
+				return new FitnessFunctionMagicDance();
 		}
 		throw new IllegalArgumentException("Invalid fitness function name \"" + name + "\"");
 	}
